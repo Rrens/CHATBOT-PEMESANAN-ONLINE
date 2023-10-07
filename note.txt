@@ -1,0 +1,15 @@
+faq
+menu
+promo
+pemesanan {
+    melihat total pesanan,
+    tracking pesanan,
+    tracking pembayaran,
+    menghapus pesanan,
+}
+
+I found in the official github the fix the issue, the solution is here: in summary you need to modify the file client.js in the node_modules/whatsapp-web.js/src/client.js
+
+change the line 175 replace this:
+
+ const INTRO_IMG_SELECTOR = 'div[role=\'textbox\']'; //'[data-icon=\'chat\']';
