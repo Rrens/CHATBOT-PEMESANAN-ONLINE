@@ -25,3 +25,9 @@ Route::group([
     Route::post('update', [FaqController::class, 'update'])->name('faq.update');
     Route::post('delete', [FaqController::class, 'delete'])->name('faq.delete');
 });
+
+// Route::group([
+//     'prefix' => 'promo'
+// ], function() {
+//     Route::get('')
+// })
