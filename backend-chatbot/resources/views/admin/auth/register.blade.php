@@ -5,7 +5,7 @@
     <h1 class="auth-title">Sign Up</h1>
     {{-- <p class="auth-subtitle mb-5">Input your data to register to our website.</p> --}}
 
-    <form action="{{ route('post_register') }}" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group position-relative has-icon-left mb-4">
             <input type="text" class="form-control form-control-xl" placeholder="Name" name="name">

@@ -6,7 +6,7 @@
     {{-- <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p> --}}
 
     <div class="center">
-        <form action="{{ route('post-login') }}" method="POST">
+        <form action="" method="POST">
             @csrf
             <div class="form-group position-relative has-icon-left mb-4">
                 <input name="email" type="email" class="form-control form-control-xl" placeholder="Email">

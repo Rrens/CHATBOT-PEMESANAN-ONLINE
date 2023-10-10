@@ -1,3 +1,6 @@
-2023/10/05-14:10:31.849 2504 Reusing MANIFEST D:\MATERI-KULIAH\TUGAS AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2023/10/05-14:10:31.849 2504 Recovering log #4
-2023/10/05-14:10:31.850 2504 Reusing old log D:\MATERI-KULIAH\TUGAS AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2023/10/05-14:11:30.723 7990 Reusing MANIFEST D:\MATERI-KULIAH\TUGAS AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2023/10/05-14:11:30.724 7990 Recovering log #4
+2023/10/05-14:11:30.724 7990 Reusing old log D:\MATERI-KULIAH\TUGAS AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/000004.log 
+2023/10/05-15:21:53.865 2c90 Level-0 table #7: started
+2023/10/05-15:21:54.045 2c90 Level-0 table #7: 12501 bytes OK
+2023/10/05-15:21:54.112 2c90 Delete type=0 #4

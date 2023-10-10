@@ -75,10 +75,10 @@
             margin-left: 5px;
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('admin/extensions/simple-datatables/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/extensions/summernote/summernote-lite.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/pages/simple-datatables.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/pages/summernote.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/simple-datatables/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/summernote/summernote-lite.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/simple-datatables.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/summernote.css') }}">
 @endpush
 
 @section('container')

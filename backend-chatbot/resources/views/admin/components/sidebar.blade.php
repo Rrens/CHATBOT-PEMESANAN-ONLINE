@@ -3,8 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="{{ route('admin.dashboard.index') }}"><img src="{{ asset('assets/img/icon/Logo-BJA.png') }}"
-                            alt="Logo" style="height: 60px !important; width: 60px" srcset="" /></a>
+                    <a href=""><img src="{{ asset('assets/img/icon/Logo-BJA.png') }}" alt="Logo"
+                            style="height: 60px !important; width: 60px" srcset="" /></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -43,38 +43,38 @@
             <ul class="menu">
                 <li class="sidebar-title">Admin</li>
 
-                <li class="sidebar-item  {{ $active == 'dashboard' ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard.index') }}" class="sidebar-link">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
+                <li class="sidebar-item {{ $active == 'user' ? 'active' : '' }}">
+                    <a href="{{ route('user.index') }}" class="sidebar-link">
+                        <i class="bi bi-person-lines-fill"></i>
+                        <span>User Management</span>
                     </a>
                 </li>
-                <li class="sidebar-item  {{ $active == 'blog' ? 'active' : '' }}">
-                    <a href="{{ route('admin.blog.index') }}" class="sidebar-link">
-                        <i class="bi bi-newspaper"></i>
-                        <span>Blog</span>
+                <li class="sidebar-item  {{ $active == 'faq' ? 'active' : '' }}">
+                    <a href="{{ route('faq.index') }}" class="sidebar-link">
+                        <i class="bi bi-question-octagon-fill"></i>
+                        <span>FAQ</span>
                     </a>
                 </li>
                 <li class="sidebar-item  {{ $active == 'galery' ? 'active' : '' }}">
-                    <a href="{{ route('admin.galery.index') }}" class="sidebar-link">
-                        <i class="bi bi-card-image"></i>
-                        <span>Galery</span>
+                    <a href="" class="sidebar-link">
+                        <i class="bi bi-menu-app-fill"></i>
+                        <span>Promo</span>
                     </a>
                 </li>
                 <li class="sidebar-item  {{ $active == 'trash' ? 'active' : '' }}">
-                    <a href="{{ route('admin.trash.index') }}" class="sidebar-link">
-                        <i class="bi bi-trash"></i>
-                        <span>Trash</span>
+                    <a href="" class="sidebar-link">
+                        <i class="bi bi-menu-button"></i>
+                        <span>Menu</span>
                     </a>
                 </li>
                 <li class="sidebar-item  {{ $active == 'contact' ? 'active' : '' }}">
-                    <a href="{{ route('admin.contact.index') }}" class="sidebar-link">
-                        <i class="bi bi-trash"></i>
-                        <span>Contact</span>
+                    <a href="" class="sidebar-link">
+                        <i class="bi bi-cart-fill"></i>
+                        <span>Pesanan</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{{ route('logout') }}" class="sidebar-link">
+                    <a href="#" class="sidebar-link">
                         <i class="bi bi-door-open-fill"></i>
                         <span>Logout</span>
                     </a>

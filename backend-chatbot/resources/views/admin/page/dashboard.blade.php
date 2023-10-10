@@ -130,8 +130,8 @@
                     </div>
                 </div>
             </div>
-            @push('scripts')
-                <script src="{{ asset('admin/extensions/apexcharts/apexcharts.min.js') }}"></script>
+            {{-- @push('scripts')
+                <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
                 <script>
                     var areaOptions = {
                         series: [
@@ -169,7 +169,7 @@
 
                     area.render();
                 </script>
-            @endpush
+            @endpush --}}
         </section>
     </div>
 @endsection

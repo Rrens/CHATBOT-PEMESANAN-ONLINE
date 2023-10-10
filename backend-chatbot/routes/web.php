@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\FaqController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+
+Route::group([
+    'prefix' => 'faq',
+], function () {
+    Route::get('', [FaqController::class, 'index'])->name('faq.index');
+    Route::post('', [FaqController::class, 'store'])->name('faq.store');
+    Route::post('update', [FaqController::class, 'update'])->name('faq.update');
+    Route::post('delete', [FaqController::class, 'delete'])->name('faq.delete');
 });

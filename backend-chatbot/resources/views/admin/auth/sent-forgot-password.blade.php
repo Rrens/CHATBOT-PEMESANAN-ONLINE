@@ -10,7 +10,7 @@
                     <img class="img-error" src="{{ asset('assets/images/mail-min.png') }}" alt="Not Found">
                     <h1 class="error-title">E-mail successfully sent</h1>
                     <p class="fs-5 text-gray-600">please check your email inbox</p>
-                    <a href="{{ route('login') }}" class="btn btn-lg btn-outline-primary mt-3">Go Login</a>
+                    <a href="" class="btn btn-lg btn-outline-primary mt-3">Go Login</a>
                 </div>
             </div>
         </div>

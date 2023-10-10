@@ -99,8 +99,8 @@
             margin-left: 5px;
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('admin/extensions/summernote/summernote-lite.css') }}">
-    <link rel="stylesheet" href="{{ asset('admin/css/pages/summernote.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/summernote/summernote-lite.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/pages/summernote.css') }}">
 @endpush
 
 @section('container')
@@ -182,9 +182,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('admin/extensions/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin/extensions/summernote/summernote-lite.min.js') }}"></script>
-    <script src="{{ asset('admin/js/pages/summernote.js') }}"></script>
+    <script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/summernote/summernote-lite.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/summernote.js') }}"></script>
 
     <script>
         let dataTag = []

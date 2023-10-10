@@ -9,7 +9,7 @@
                         alt="Not Found">
                     <h1 class="error-title">Password successfully sent</h1>
                     <p class="fs-5 text-gray-600">please login with new password</p>
-                    <a href="{{ route('login') }}" class="btn btn-lg btn-outline-primary mt-3">Go Login</a>
+                    <a href="" class="btn btn-lg btn-outline-primary mt-3">Go Login</a>
                 </div>
             </div>
         </div>
