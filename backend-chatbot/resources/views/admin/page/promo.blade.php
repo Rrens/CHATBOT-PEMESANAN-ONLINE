@@ -49,9 +49,6 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
-                                            @php
-                                                // dd($item);
-                                            @endphp
                                             <tr>
                                                 <td class="text-bold-500">
                                                     {{ $loop->iteration }}
@@ -77,7 +74,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                @include('admin.components.paginate')
+                                {{-- @include('admin.components.paginate') --}}
                             </div>
                         </div>
                     </div>

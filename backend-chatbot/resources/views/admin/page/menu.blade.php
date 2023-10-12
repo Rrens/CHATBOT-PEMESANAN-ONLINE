@@ -74,9 +74,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-
-                                @include('admin.components.paginate')
-
                             </div>
                         </div>
                     </div>

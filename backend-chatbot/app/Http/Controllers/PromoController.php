@@ -14,7 +14,7 @@ class PromoController extends Controller
     {
         $active = 'promo';
         $menus = Menus::all();
-        $data = Promos::with('menu')->paginate(10);
+        $data = Promos::with('menu')->get();
         return view('admin.page.promo', compact('active', 'data', 'menus'));
     }
 

@@ -42,7 +42,6 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Admin</li>
-
                 <li class="sidebar-item {{ $active == 'user' ? 'active' : '' }}">
                     <a href="{{ route('user.index') }}" class="sidebar-link">
                         <i class="bi bi-person-lines-fill"></i>

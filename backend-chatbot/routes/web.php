@@ -23,6 +23,8 @@ Route::group([
     'prefix' => 'user',
 ],  function () {
     Route::get('', [UserController::class, 'index'])->name('user.index');
+    Route::post('/change-status-user', [UserController::class, 'change_status_user'])->name('user.change_status_user');
+    Route::post('/block_user', [UserController::class, 'block_user'])->name('user.block_user');
 });
 
 Route::group([

@@ -12,7 +12,7 @@ class MenuController extends Controller
     public function index()
     {
         $active = 'menu';
-        $data = Menus::paginate(10);
+        $data = Menus::all();
         return view('admin.page.menu', compact('active', 'data'));
     }
 
