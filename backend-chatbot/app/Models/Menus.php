@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FaqsModel extends Model
+class Menus extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'faqs';
+    protected $table = 'menus';
     protected $primaryKey = 'id';
     protected $guarded = [];
 
     protected $fillable = [
-        'question',
-        'answer',
-        'status',
+        'name',
+        'price',
+        'stock',
         'created_at',
         'updated_at',
     ];

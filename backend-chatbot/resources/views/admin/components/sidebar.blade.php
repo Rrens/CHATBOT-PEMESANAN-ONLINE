@@ -55,16 +55,16 @@
                         <span>FAQ</span>
                     </a>
                 </li>
-                <li class="sidebar-item  {{ $active == 'galery' ? 'active' : '' }}">
-                    <a href="" class="sidebar-link">
-                        <i class="bi bi-menu-app-fill"></i>
-                        <span>Promo</span>
-                    </a>
-                </li>
-                <li class="sidebar-item  {{ $active == 'trash' ? 'active' : '' }}">
-                    <a href="" class="sidebar-link">
+                <li class="sidebar-item  {{ $active == 'menu' ? 'active' : '' }}">
+                    <a href="{{ route('menu.index') }}" class="sidebar-link">
                         <i class="bi bi-menu-button"></i>
                         <span>Menu</span>
+                    </a>
+                </li>
+                <li class="sidebar-item  {{ $active == 'promo' ? 'active' : '' }}">
+                    <a href="{{ route('promo.index') }}" class="sidebar-link">
+                        <i class="bi bi-menu-app-fill"></i>
+                        <span>Promo</span>
                     </a>
                 </li>
                 <li class="sidebar-item  {{ $active == 'contact' ? 'active' : '' }}">

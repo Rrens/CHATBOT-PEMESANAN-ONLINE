@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Faq\FaqRequest;
-use App\Models\FaqsModel;
+use App\Models\Faqs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,8 +13,8 @@ class FaqController extends Controller
     public function index()
     {
         $active = 'faq';
-        $data = FaqsModel::get();
-        return view('admin.page.blog', compact('active', 'data'));
+        $data = Faqs::get();
+        return view('admin.page.faq', compact('active', 'data'));
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class FaqController extends Controller
             return back()->withInput();
         }
 
-        FaqsModel::create([
+        Faqs::create([
             'question' => $request->question,
             'answer' => $request->answer,
             'status' => true
@@ -61,7 +61,7 @@ class FaqController extends Controller
             Alert::error($validator->messages()->all());
             return back()->withInput();
         }
-        $data = FaqsModel::findOrFail($request->id);
+        $data = Faqs::findOrFail($request->id);
         $data->question = $request->question;
         $data->answer = $request->answer;
         $data->save();
@@ -81,7 +81,7 @@ class FaqController extends Controller
             return back()->withInput();
         }
 
-        FaqsModel::findOrFail($request->id)->delete();
+        Faqs::findOrFail($request->id)->delete();
         Alert::toast('Sukses menghapus FAQ', 'success');
         return back();
     }

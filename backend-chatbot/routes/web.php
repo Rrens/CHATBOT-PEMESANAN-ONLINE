@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::redirect('/', 'faq');
 
+Route::group([
+    'prefix' => 'user',
+],  function () {
+    Route::get('', [UserController::class, 'index'])->name('user.index');
+});
 
 Route::group([
     'prefix' => 'faq',
@@ -26,8 +34,21 @@ Route::group([
     Route::post('delete', [FaqController::class, 'delete'])->name('faq.delete');
 });
 
-// Route::group([
-//     'prefix' => 'promo'
-// ], function() {
-//     Route::get('')
-// })
+Route::group([
+    'prefix' => 'menu',
+], function () {
+    Route::get('', [MenuController::class, 'index'])->name('menu.index');
+    Route::post('', [MenuController::class, 'store'])->name('menu.store');
+    Route::post('update', [MenuController::class, 'update'])->name('menu.update');
+    Route::post('delete', [MenuController::class, 'delete'])->name('menu.delete');
+});
+
+
+
+Route::group([
+    'prefix' => 'promo'
+], function () {
+    Route::get('', [PromoController::class, 'index'])->name('promo.index');
+    Route::post('update', [PromoController::class, 'index'])->name('promo.index');
+    Route::post('delete', [PromoController::class, 'index'])->name('promo.index');
+});
