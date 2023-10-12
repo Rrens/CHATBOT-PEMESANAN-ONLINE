@@ -1,5 +1,5 @@
 @extends('admin.components.master')
-@section('title', 'FAQ')
+@section('title', 'PROMO')
 @push('head')
     <style>
         .color-card {
@@ -22,12 +22,12 @@
 @section('container')
     <div class="page-heading d-flex justify-content-between">
         <div class="flex-start">
-            <h3>FAQ</h3>
+            <h3>Promo</h3>
         </div>
         <div class="flex-end">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Add_modal"><i
                     class="bi bi-plus-circle"></i>&nbsp Tambah
-                FAQ</button>
+                Promo</button>
         </div>
     </div>
     <div class="page-content">
@@ -41,22 +41,29 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Pertanyaan</th>
-                                            <th>Jawaban</th>
+                                            <th>Nama Promo</th>
+                                            <th>Nama Barang</th>
+                                            <th>diskon</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
+                                            @php
+                                                // dd($item);
+                                            @endphp
                                             <tr>
                                                 <td class="text-bold-500">
                                                     {{ $loop->iteration }}
                                                 </td>
                                                 <td class="text-bold-500">
-                                                    {{ $item->question }}
+                                                    {{ $item->name }}
                                                 </td>
                                                 <td class="text-bold-500">
-                                                    {{ $item->answer }}
+                                                    {{ $item->menu[0]->name }}
+                                                </td>
+                                                <td class="text-bold-500">
+                                                    {{ $item->discount . '%' }}
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-light-warning btn-sm" data-bs-toggle="modal"
@@ -70,6 +77,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                @include('admin.components.paginate')
                             </div>
                         </div>
                     </div>
@@ -83,21 +91,36 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah FAQ</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Promo</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('faq.store') }}" method="post">
+                <form action="{{ route('promo.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-3">
-                            <label for="pertanyaan">Pertanyaan</label>
-                            <input type="text" class="form-control mt-3" id="pertanyaan"
-                                name="question"value="{{ old('question') }}" required>
+                            <label for="product">Produk</label>
+                            <select name="menu" class="form-select mt-3">
+                                <option hidden selected>Pilih Produk</option>
+                                @foreach ($menus as $menu)
+                                    <option value="{{ empty(old('menu')) ? $menu->id : old('menu') }}">
+                                        {{ empty(old('menu')) ? $menu->name : old('menu') }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="jawaban">Jawaban</label>
-                            <input type="text" class="form-control mt-3" id="jawaban"
-                                name="answer"value="{{ old('answer') }}" required>
+                            <label for="name">Nama Promo</label>
+                            <input type="text" class="form-control mt-2" id="name"
+                                name="name"value="{{ old('name') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount">Discount</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control mt-2" name="discount"
+                                    placeholder="Masukan berapa persen diskon">
+                                <div class="input-group-append mt-2">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -121,22 +144,39 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah FAQ</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Promo</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('faq.update') }}" method="post">
+                    <form action="{{ route('promo.update') }}" method="post">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group mb-3">
-                                <label for="pertanyaan">Pertanyaan</label>
-                                <input type="number" value="{{ $item->id }}" name="id" hidden>
-                                <input type="text" class="form-control mt-3" id="pertanyaan" name="question"
-                                    value="{{ $item->question }}" required>
+                                <label for="product">Produk</label>
+                                <select name="menu" class="form-select mt-3">
+                                    <option hidden selected>Pilih Produk</option>
+                                    @foreach ($menus as $menu)
+                                        <option value="{{ $menu->id }}"
+                                            {{ $item->id_menu == $menu->id ? 'selected' : '' }}>
+                                            {{ $menu->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="jawaban">Jawaban</label>
-                                <input type="text" class="form-control mt-3" id="jawaban"
-                                    name="answer"value="{{ $item->answer }}" required>
+                                <label for="name">Nama Promo</label>
+                                <input type="number" value="{{ $item->id }}" name="id" hidden>
+                                <input type="text" class="form-control mt-2" id="name"
+                                    name="name"value="{{ $item->name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount">Discount</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control mt-2" name="discount"
+                                        value="{{ $item->discount }}" placeholder="Masukan berapa persen diskon">
+                                    <div class="input-group-append mt-2">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -161,10 +201,10 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-center">
-                        <h5 class="modal-title" id="exampleModalScrollableTitle">Hapus FAQ
-                            {{ $item->title . ' ?' }}</h5>
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Hapus Promo
+                            {{ $item->name . ' ?' }}</h5>
                     </div>
-                    <form action="{{ route('faq.delete') }}" id="myForm" method="post">
+                    <form action="{{ route('promo.delete') }}" id="myForm" method="post">
                         @csrf
                         <div class="modal-footer d-flex justify-content-center">
                             <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">

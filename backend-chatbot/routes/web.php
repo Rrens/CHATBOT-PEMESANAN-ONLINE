@@ -49,6 +49,7 @@ Route::group([
     'prefix' => 'promo'
 ], function () {
     Route::get('', [PromoController::class, 'index'])->name('promo.index');
-    Route::post('update', [PromoController::class, 'index'])->name('promo.index');
-    Route::post('delete', [PromoController::class, 'index'])->name('promo.index');
+    Route::post('', [PromoController::class, 'store'])->name('promo.store');
+    Route::post('update', [PromoController::class, 'update'])->name('promo.update');
+    Route::post('delete', [PromoController::class, 'delete'])->name('promo.delete');
 });
