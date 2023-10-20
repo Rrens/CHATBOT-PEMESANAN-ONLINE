@@ -112,8 +112,8 @@
                         <div class="form-group">
                             <label for="discount">Discount</label>
                             <div class="input-group">
-                                <input type="number" class="form-control mt-2" name="discount"
-                                    placeholder="Masukan berapa persen diskon">
+                                <input type="number" class="form-control mt-2" name="discount" step="0.01"
+                                    placeholder="Masukan berapa persen diskon" value="{{ old('discount') }}">
                                 <div class="input-group-append mt-2">
                                     <span class="input-group-text">%</span>
                                 </div>
@@ -125,7 +125,7 @@
                             <i class="bx bx-x d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">Close</span>
                         </button>
-                        <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                        <button type="submit" class="btn btn-primary ml-1">
                             <i class="bx bx-check d-block d-sm-none"></i>
                             <span class="d-none d-sm-block">Save</span>
                         </button>

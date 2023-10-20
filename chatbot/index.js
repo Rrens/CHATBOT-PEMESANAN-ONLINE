@@ -2,7 +2,7 @@ const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const { ListFAQ, ListFaqHandler } = require('./features/faq');
 const { ListMenu } = require('./features/menu');
-const { ListPromo } = require('./features/promo');
+const { ListPromoHandler } = require('./features/promo');
 
 
 
@@ -38,7 +38,7 @@ client.on('message', async msg => {
     }
 
     if(text === 'promo'){
-        await ListPromo(text, msg)
+        await ListPromoHandler(text, msg)
     }
 
     if(text === 'list pesanan'){

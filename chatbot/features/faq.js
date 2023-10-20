@@ -1,5 +1,5 @@
 const axios = require("axios");
-require('dotenv').config()
+require('dotenv').config();
 
 // const ListFAQ2 = async (text, msg) => {
 //     const chat = await msg.getChat();
@@ -41,8 +41,8 @@ const ListFaqHandler = async(text, msg) => {
 const ListFAQ = async (text, msg) => {
     const result = {
         success: false,
-        data_ask: null,
-        data_answer: null,
+        dataAsk: null,
+        dataAnswer: null,
         data: null,
         message: ""
     }
@@ -50,27 +50,23 @@ const ListFAQ = async (text, msg) => {
 
     return await axios({
         method: 'GET',
-        url: process.env.BE_HOST + 'faq',
-    })
-    .then((response) => {
+        url: `${process.env.BE_HOST}faq`,
+    }).then((response) => {
         if(response.status == 200){
             // console.log(response.data.data)
             result.success = true;
-            let hasilGabungan = '';
-            let array_data = response.data.data;
-            // lastIndex = array_data.length - 1;
-            // console.log(lastIndex);
-    // Menggabungkan teks dari kedua array
-            for (let i = 0; i < array_data.length; i++) {
-                if (i === array_data.length - 1) {
-                    hasilGabungan += `Q: ${response.data.data[i].question}\nA: ${response.data.data[i].answer}\n`;
+            let resultCombined = '';
+            let arrayData = response.data.data;
+            for (let i = 0; i < arrayData.length; i++) {
+                if (i === arrayData.length - 1) {
+                    resultCombined += `Q: ${response.data.data[i].question}\nA: ${response.data.data[i].answer}\n`;
                 }else{
-                    hasilGabungan += `Q: ${response.data.data[i].question}\nA: ${response.data.data[i].answer}\n \n`;
+                    resultCombined += `Q: ${response.data.data[i].question}\nA: ${response.data.data[i].answer}\n \n`;
                 }
             }
-            result.data_ask = response.data.data[0].question;
-            result.data_answer = response.data.data[0].answer;
-            result.data = hasilGabungan;
+            result.dataAsk = response.data.data[0].question;
+            result.dataAnswer = response.data.data[0].answer;
+            result.data = resultCombined;
             result.message = "SUCCESS"
         }else{
             result.message = "FAILED RESPONSE";

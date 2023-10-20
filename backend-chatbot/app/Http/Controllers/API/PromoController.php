@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Faqs;
-use Illuminate\Http\Request;
+use App\Models\Promos;
 
-class FAQController extends Controller
+class PromoController extends Controller
 {
     public function index()
     {
 
-        $data = Faqs::all();
+        $data = Promos::with('menu')->get();
         if (!empty($data[0])) {
             return response()->json([
                 'meta' => [
