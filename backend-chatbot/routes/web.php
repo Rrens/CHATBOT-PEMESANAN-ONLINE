@@ -6,18 +6,8 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::redirect('/', 'faq');
+// Route::redirect('/', 'faq');
 
 Route::group([
     'prefix' => 'user',
@@ -44,8 +34,6 @@ Route::group([
     Route::post('update', [MenuController::class, 'update'])->name('menu.update');
     Route::post('delete', [MenuController::class, 'delete'])->name('menu.delete');
 });
-
-
 
 Route::group([
     'prefix' => 'promo'

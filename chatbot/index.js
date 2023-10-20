@@ -1,6 +1,6 @@
 const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
-const { ListFAQ } = require('./features/faq');
+const { ListFAQ, ListFaqHandler } = require('./features/faq');
 const { ListMenu } = require('./features/menu');
 const { ListPromo } = require('./features/promo');
 
@@ -30,7 +30,7 @@ client.on('message', async msg => {
     }
 
     if(text === 'faq'){
-        await ListFAQ(text, msg)
+        await ListFaqHandler(text, msg)
     }
 
     if(text === 'berikan gambar terbaik'){
