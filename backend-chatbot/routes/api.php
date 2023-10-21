@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\API\FAQController;
+use App\Http\Controllers\API\MenuController;
+use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PromoController;
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +28,20 @@ Route::group([
 ], function () {
     Route::get('faq', [FAQController::class, 'index']);
     Route::get('promo', [PromoController::class, 'index']);
+    Route::get('menu', [MenuController::class, 'index']);
+
+    Route::group([
+        'prefix' => 'user',
+    ], function () {
+        Route::post('check-phone-number', [UserController::class, 'index']);
+        Route::post('add-phone-number', [UserController::class, 'store']);
+    });
+
+    Route::group([
+        'prefix' => 'order'
+    ], function () {
+        Route::post('list-order', [OrderController::class, 'index']);
+        Route::post('store-order', [OrderController::class, 'store']);
+        Route::post('update-order', [OrderController::class, 'update']);
+    });
 });

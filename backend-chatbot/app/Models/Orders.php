@@ -6,24 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Menus extends Model
+class Orders extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'menus';
+    protected $table = 'orders';
     protected $primaryKey = 'id';
     protected $guarded = [];
 
     protected $fillable = [
-        'name',
-        'price',
-        'stock',
+        'id_customer',
+        'resi_number',
+        'address',
         'created_at',
         'updated_at',
     ];
 
-    public function promo()
+    public function customer()
     {
-        return $this->belongsTo(Promos::class);
+        return $this->hasMany(Customers::class, 'id', 'id_customer');
     }
 
     public function order_detail()

@@ -1,16 +1,52 @@
-const { default: axios } = require('axios');
-const { MessageMedia } = require('whatsapp-web.js');
+const axios = require("axios");
+const { checkNumberHandler } = require("./cekNomor");
+require('dotenv').config();
 
-const ListMenu = async (text, msg) => {
+const ListMenuHandler = async (text, msg) => {
     const chat = await msg.getChat();
 
-    let image = "https://awsimages.detik.net.id/community/media/visual/2017/12/06/6414c1ae-fcd1-49a6-8316-4a71c29f93ff_43.jpg";
+    checkNumberHandler(msg);
 
-    const media = await MessageMedia.fromUrl(image);
-    console.log(media, media['filename']);
-    return chat.sendMessage(await MessageMedia.fromUrl(image), {caption: 'Kera Selfie'});
+    try {
+        return chat.sendMessage(await ListMenu());
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const ListMenu = async () => {
+    const result = {
+        success: false,
+        dataName: null,
+        dataPrice: null,
+        dataOnDiscount: false,
+        dataStock: null,
+        data: null,
+        table: "",
+        message: ""
+    }
+
+    return await axios({
+        method: 'GET',
+        url: `${process.env.BE_HOST}menu`
+    }).then((response) => {
+        if(response.status == 200){
+            let arrayData = response.data.data;
+            result.success = true;
+            result.table = "Nama Barang\tHarga\t\tStok\n";
+            result.table += "---------------------------------------------\n";
+            for (let i = 0; i < arrayData.length; i++) {
+                result.table += `${arrayData[i].name}\tRp.${arrayData[i].price}\t${arrayData[i].stock}\n`;
+            }
+            result.table += "---------------------------------------------";
+        }
+        // console.log(result.table)
+        return result.table
+    }).catch((error) => {
+        console.log(error);
+    })
 }
 
 module.exports = {
-    ListMenu
+    ListMenuHandler
 }
