@@ -5,7 +5,12 @@ const {  ListMenuHandler } = require('./features/menu');
 const { ListPromoHandler } = require('./features/promo');
 const { gambarBagus } = require('./features/gambarBagus');
 const { checkNumberHandler } = require('./features/cekNomor');
-const { orderHandler, updateOrderHandler, listOrder } = require('./features/pesanan');
+const { 
+    orderHandler, 
+    updateOrderHandler, 
+    listOrder, 
+    deteleOrderHandler 
+} = require('./features/pesanan');
 
 
 
@@ -68,8 +73,8 @@ client.on('message', async msg => {
         await updateOrderHandler(text, msg)
     }
 
-    if(text === 'list pesanan'){
-        // 
+    if(text.includes('hapus/')){
+        await deteleOrderHandler(text, msg)
     }
 
     if(text === 'tracking'){

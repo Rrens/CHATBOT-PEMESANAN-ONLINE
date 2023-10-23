@@ -1,4 +1,5 @@
 const axios = require("axios");
+const { checkNumberHandler } = require("./cekNomor");
 require('dotenv').config();
 
 const ListFaqHandler = async(text, msg) => {
@@ -26,6 +27,9 @@ const ListFAQRequest = async () => {
         method: 'GET',
         url: `${process.env.BE_HOST}faq`,
     }).then((response) => {
+        if(response.status == 404){
+            console.log(response.data)
+        }
         if(response.status == 200){
             let resultCombined = '';
             let arrayData = response.data.data;
@@ -47,7 +51,8 @@ const ListFAQRequest = async () => {
         return result.data;
     })
     .catch((error) => {
-        console.log(error)
+        console.log(error.response.data)
+        
     })
 }
 

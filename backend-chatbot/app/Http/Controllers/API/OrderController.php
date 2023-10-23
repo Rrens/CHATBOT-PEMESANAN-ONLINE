@@ -8,6 +8,7 @@ use App\Models\Menus;
 use App\Models\OrderDetail;
 use App\Models\Orders;
 use App\Models\Promos;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,8 +30,32 @@ class OrderController extends Controller
             ], 400);
         }
 
-        $data = Orders::where('id_customer', Customers::where('whatsapp', $request['customer'])->first()['id'])->get();
-        return response()->json($data);
+        $order = Orders::where('id_customer', Customers::where('whatsapp', $request['customer'])->first()['id'])
+            ->where('status', 0)
+            ->first();
+
+        if (!empty($order)) {
+            $data = OrderDetail::with('menu', 'promo')
+                ->where('id_order', $order->id)
+                ->get();
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Order Successfully'
+                ],
+                'data' => [
+                    'order' => $data,
+                ]
+            ], 200);
+        }
+
+        return response()->json([
+            'meta' => [
+                'status' => 'Success',
+                'message' => 'Order Not Found'
+            ],
+        ], 404);
     }
 
     public function store(Request $request)
@@ -51,7 +76,9 @@ class OrderController extends Controller
             ], 400);
         }
 
-        $check_stock = Menus::where('name', $request['product'])->where('stock', '>=', $request['quantity'])->first();
+        $menu = Menus::where('name', $request['product'])->first();
+
+        $check_stock = Menus::where('id', $menu->id)->where('stock', '>=', $request['quantity'])->first();
 
         // CHECK PRODUCT
         if (empty(Menus::where('name', $request['product'])->first())) {
@@ -72,36 +99,76 @@ class OrderController extends Controller
             ], 200);
         }
 
-        $data = new Orders();
-        $data->id_customer = Customers::where('whatsapp', $request['customer'])->first()['id'];
-        $data->save();
+        $customer_id = Customers::where('whatsapp', $request['customer'])->first()['id'];
 
-        $menu = Menus::where('name', $request['product'])->first();
-        $promo = Promos::where('id_menu', $menu->id)->first();
+        $checkAvailableProductOnOrder = OrderDetail::with('order')
+            ->whereHas('order',  function ($query) use ($customer_id) {
+                $query->where('status', 0)
+                    ->where('id_customer', $customer_id);
+            })
+            ->where('id_menu', $menu->id)->first();
 
-        $data_detail = new OrderDetail();
-        $data_detail->id_order = $data->id;
-        $data_detail->id_menu = $menu->id;
-        $data_detail->quantity = (int) $request['quantity'];
-        if (!empty($promo)) {
-            $data_detail->id_promo = $promo->id;
-            $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
-            $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
+        $data = Orders::where('id_customer', $customer_id)->where('status', 0)->first();
+
+        if (empty($checkAvailableProductOnOrder)) {
+
+            if (empty($data)) {
+                $data = new Orders();
+                $data->id_customer = Customers::where('whatsapp', $request['customer'])->first()['id'];
+                $data->save();
+            }
+
+            $promo = Promos::where('id_menu', $menu->id)->first();
+
+            $data_detail = new OrderDetail();
+            $data_detail->id_order = $data->id;
+            $data_detail->id_menu = $menu->id;
+            $data_detail->quantity = (int) $request['quantity'];
+            if (!empty($promo)) {
+                $data_detail->id_promo = $promo->id;
+                $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
+                $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
+            } else {
+                $data_detail->price = (int) $menu->price * $data_detail->quantity;
+            }
+            $data_detail->save();
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Order Successfully'
+                ],
+                'data' => [
+                    'order' => $data,
+                    'order_detail' => $data_detail
+                ]
+            ], 200);
         } else {
-            $data_detail->price = (int) $menu->price * $data_detail->quantity;
-        }
-        $data_detail->save();
 
-        return response()->json([
-            'meta' => [
-                'status' => 'Success',
-                'message' => 'Order Successfully'
-            ],
-            'data' => [
-                'order' => $data,
-                'order_detail' => $data_detail
-            ]
-        ], 200);
+            $data_detail = OrderDetail::where('id_order', $data->id)->first();
+            $data_detail->id_menu = $menu->id;
+            $data_detail->quantity += (int) $request['quantity'];
+            if (!empty($promo)) {
+                $data_detail->id_promo = $promo->id;
+                $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
+                $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
+            } else {
+                $data_detail->price = (int) $menu->price * $data_detail->quantity;
+            }
+
+            $data_detail->save();
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Order Successfully'
+                ],
+                'data' => [
+                    'order' => $data,
+                    'order_detail' => $data_detail
+                ]
+            ], 200);
+        }
     }
 
     public function update(Request $request)
@@ -160,28 +227,98 @@ class OrderController extends Controller
         $menu = Menus::where('name', $request['product'])->first();
         $promo = Promos::where('id_menu', $menu->id)->first();
 
+        $checkAvailableProductOnOrder = OrderDetail::with('order')
+            ->whereHas('order',  function ($query) use ($customer_id) {
+                $query->where('status', 0)
+                    ->where('id_customer', $customer_id);
+            })
+            ->where('id_menu', $menu->id)->first();
 
-        $data_detail = OrderDetail::where('id_order', $data->id)->first();
-        $data_detail->id_menu = $menu->id;
-        $data_detail->quantity = (int) $request['quantity'];
-        if (!empty($promo)) {
-            $data_detail->id_promo = $promo->id;
-            $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
-            $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
+        if (!empty($checkAvailableProductOnOrder)) {
+
+            $data_detail = OrderDetail::where('id_order', $data->id)->first();
+            $data_detail->id_menu = $menu->id;
+            $data_detail->quantity = (int) $request['quantity'];
+            if (!empty($promo)) {
+                $data_detail->id_promo = $promo->id;
+                $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
+                $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
+            } else {
+                $data_detail->price = (int) $menu->price * $data_detail->quantity;
+            }
+            $data_detail->save();
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Update Order Successfully'
+                ],
+                'data' => [
+                    'order' => $data,
+                    'order_detail' => $data_detail
+                ]
+            ], 200);
         } else {
-            $data_detail->price = (int) $menu->price * $data_detail->quantity;
+            return $this->store($request);
         }
-        $data_detail->save();
+    }
 
-        return response()->json([
-            'meta' => [
-                'status' => 'Success',
-                'message' => 'Stock Available'
-            ],
-            'data' => [
-                'order' => $data,
-                'order_detail' => $data_detail
-            ]
-        ], 200);
+    public function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+            'product' => 'required',
+        ]);
+
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        try {
+            $customer = Customers::where('whatsapp', $request['customer'])->first()['id'];
+
+            $cek = OrderDetail::where(
+                'id_order',
+                Orders::where('id_customer', $customer)
+                    ->where('status', 0)
+                    ->first()['id']
+            )
+                ->where(
+                    'id_menu',
+                    Menus::where('name', $request['product'])
+                        ->first()['id']
+                )
+                ->first();
+
+            if (!empty($cek)) {
+                $cek->delete();
+                return response()->json([
+                    'meta' => [
+                        'status' => 'Success',
+                        'message' => 'Delete Order Successfully'
+                    ],
+                ], 200);
+            }
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => 'Data Not Found'
+                ],
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $error->getMessage()
+                ],
+            ], 400);
+        }
     }
 }

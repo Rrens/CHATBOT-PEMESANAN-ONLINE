@@ -43,5 +43,6 @@ Route::group([
         Route::post('list-order', [OrderController::class, 'index']);
         Route::post('store-order', [OrderController::class, 'store']);
         Route::post('update-order', [OrderController::class, 'update']);
+        Route::post('delete', [OrderController::class, 'delete']);
     });
 });

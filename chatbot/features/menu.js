@@ -5,7 +5,7 @@ require('dotenv').config();
 const ListMenuHandler = async (text, msg) => {
     const chat = await msg.getChat();
 
-    checkNumberHandler(msg);
+    await checkNumberHandler(msg);
 
     try {
         return chat.sendMessage(await ListMenu());
@@ -43,7 +43,7 @@ const ListMenu = async () => {
         // console.log(result.table)
         return result.table
     }).catch((error) => {
-        console.log(error);
+        console.log(error.response.data)
     })
 }
 
