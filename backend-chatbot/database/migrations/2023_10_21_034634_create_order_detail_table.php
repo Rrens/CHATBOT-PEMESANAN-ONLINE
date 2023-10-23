@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_promo')->nullable();
             $table->foreign('id_promo')->references('id')->on('promos');
             $table->decimal('promo_amount')->nullable();
-            $table->decimal('price')->nullable();
+            $table->double('price')->nullable();
             $table->integer('quantity');
             $table->softDeletes();
             $table->timestamps();

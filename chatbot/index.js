@@ -81,9 +81,12 @@ client.on('message', async msg => {
         // 
     }
 
-    if(text === 'bayar'){
+    const regexBayar = /^bayar\/([a-zA-Z\s]+)\/(\d+)$/;
+
+    if(text === regexBayar.test(text)){
         // 
     }
+
     if(text === 'hapus pesanan'){
         // 
     }

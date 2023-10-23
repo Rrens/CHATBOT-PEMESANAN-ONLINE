@@ -80,6 +80,7 @@ class OrderController extends Controller
 
         $check_stock = Menus::where('id', $menu->id)->where('stock', '>=', $request['quantity'])->first();
 
+
         // CHECK PRODUCT
         if (empty(Menus::where('name', $request['product'])->first())) {
             return response()->json([
@@ -99,6 +100,8 @@ class OrderController extends Controller
             ], 200);
         }
 
+
+
         $customer_id = Customers::where('whatsapp', $request['customer'])->first()['id'];
 
         $checkAvailableProductOnOrder = OrderDetail::with('order')
@@ -109,6 +112,18 @@ class OrderController extends Controller
             ->where('id_menu', $menu->id)->first();
 
         $data = Orders::where('id_customer', $customer_id)->where('status', 0)->first();
+
+        $checkQuantity = OrderDetail::where('id_menu', $menu->id)->where('id_order', $data->id)->first()['quantity']
+            +
+            $request['quantity'];
+        if ($checkQuantity > Menus::where('id', $menu->id)->first()['stock']) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'failed',
+                    'message' => 'Out of Stock'
+                ],
+            ], 200);
+        }
 
         if (empty($checkAvailableProductOnOrder)) {
 
@@ -132,21 +147,11 @@ class OrderController extends Controller
                 $data_detail->price = (int) $menu->price * $data_detail->quantity;
             }
             $data_detail->save();
-
-            return response()->json([
-                'meta' => [
-                    'status' => 'Success',
-                    'message' => 'Order Successfully'
-                ],
-                'data' => [
-                    'order' => $data,
-                    'order_detail' => $data_detail
-                ]
-            ], 200);
         } else {
-
-            $data_detail = OrderDetail::where('id_order', $data->id)->first();
-            $data_detail->id_menu = $menu->id;
+            $data_detail = OrderDetail::where('id_order', $data->id)
+                ->where('id_menu', $menu->id)
+                ->first();
+            // $data_detail->id_menu = $menu->id;
             $data_detail->quantity += (int) $request['quantity'];
             if (!empty($promo)) {
                 $data_detail->id_promo = $promo->id;
@@ -157,18 +162,21 @@ class OrderController extends Controller
             }
 
             $data_detail->save();
-
-            return response()->json([
-                'meta' => [
-                    'status' => 'Success',
-                    'message' => 'Order Successfully'
-                ],
-                'data' => [
-                    'order' => $data,
-                    'order_detail' => $data_detail
-                ]
-            ], 200);
         }
+
+        $data_chatbot = OrderDetail::with('menu', 'promo')
+            ->where('id_order', $data->id)
+            ->get();
+
+        return response()->json([
+            'meta' => [
+                'status' => 'Success',
+                'message' => 'Order Successfully'
+            ],
+            'data' => [
+                'order' => $data_chatbot,
+            ]
+        ], 200);
     }
 
     public function update(Request $request)
@@ -234,10 +242,23 @@ class OrderController extends Controller
             })
             ->where('id_menu', $menu->id)->first();
 
+        $checkQuantity = OrderDetail::where('id_menu', $menu->id)->where('id_order', $data->id)->first()['quantity']
+            +
+            $request['quantity'];
+        if ($checkQuantity > Menus::where('id', $menu->id)->first()['stock']) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'failed',
+                    'message' => 'Out of Stock'
+                ],
+            ], 200);
+        }
+
         if (!empty($checkAvailableProductOnOrder)) {
 
-            $data_detail = OrderDetail::where('id_order', $data->id)->first();
-            $data_detail->id_menu = $menu->id;
+            $data_detail = OrderDetail::where('id_order', $data->id)
+                ->where('id_menu', $menu->id)
+                ->first();
             $data_detail->quantity = (int) $request['quantity'];
             if (!empty($promo)) {
                 $data_detail->id_promo = $promo->id;
@@ -248,14 +269,17 @@ class OrderController extends Controller
             }
             $data_detail->save();
 
+            $data_chatbot = OrderDetail::with('menu', 'promo')
+                ->where('id_order', $data->id)
+                ->get();
+
             return response()->json([
                 'meta' => [
                     'status' => 'Success',
-                    'message' => 'Update Order Successfully'
+                    'message' => 'Update Successfully'
                 ],
                 'data' => [
-                    'order' => $data,
-                    'order_detail' => $data_detail
+                    'order' => $data_chatbot,
                 ]
             ], 200);
         } else {
