@@ -119,7 +119,7 @@ const orderRequest = async (msg, phoneNumber) => {
             return result.table;
         }
     }).catch((error) => {
-        console.log(error)
+        console.log(error.response.data)
         
     })
 
@@ -202,7 +202,6 @@ const deteleOrderHandler = async (text, msg) => {
         return chat.sendMessage(await deleteOrderRequest(msg, phoneNumber));
     } catch (error) {
         console.log(error)
-        
     }
 }
 
@@ -234,9 +233,106 @@ const deleteOrderRequest = async (msg, phoneNumber) => {
     })
 }
 
+const checkPaymentHandler = async (text, msg) => {
+    const chat = await msg.getChat();
+    
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await checkPaymentRequest(msg, phoneNumber));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const checkPaymentRequest = async (msg, phoneNumber) => {
+    
+    const data = {
+        phoneNumber: phoneNumber
+    }
+
+    const result = {
+        success: false,
+        data: null,
+        message: "",
+        table: "",
+    }
+
+    return await axios({
+        method: 'POST',
+        url: `${process.env.BE_HOST}order/checkout`,
+        data: {
+            customer: data.phoneNumber,
+        }
+    }).then((response) => {
+        
+        let data = response.data.data.data;
+        console.log(data);
+        
+        // console.log(data[2])
+
+        // result.success = 'SUCCESS';
+        // result.table = 'METODE PEMBAYARAN\n'
+        //     result.table += "--------------------------\n";
+        //     for (let i = 0; i < data.length; i++) {
+        //         result.table += `${data[i]}\n`;
+        //     }
+        //     result.table += "--------------------------\n";
+        //     result.table += "Cara Memilih Metode pembayaran ex: /bayar/bni";
+        //     // result.table += "Cara Checkout bayar/{metode pembayaran}/{virtual account}/{Alamat}/{Kode Pos}"
+
+            
+        //     return result.table;
+    }).catch((error) => {
+        console.log(error.response.data)
+    })
+}
+
+const paymentCheckoutHandler = async (text, msg) => {
+     const chat = await msg.getChat();
+    
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await paymentCheckoutRequest(msg, phoneNumber));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const paymentCheckoutRequest = async (msg, phoneNumber) => {
+    const body = msg._data.body;
+    const cmd = body.split("/");
+
+    const data = {
+        Address: cmd[1],
+        zipCode: cmd[2],
+        phoneNumber: phoneNumber
+    }
+
+    return await axios({
+        method: 'POST',
+        url: `${process.env.BE_HOST}order/checkout`,
+        data: {
+            customer: data.phoneNumber,
+            address: data.Address,
+            zip_code: data.zipCode
+        }
+    }).then((response) => {
+        
+        let data = response.data.data;
+        console.log(data);
+        return `Silahkan Melakukan Pembayaran Melalui link dibawah ini\n${data.link}`
+    }).catch((error) => {
+        console.log(error.response)
+    })
+}
+
 module.exports = {
     listOrder,
     orderHandler,
     updateOrderHandler,
-    deteleOrderHandler
+    deteleOrderHandler,
+    checkPaymentHandler,
+    paymentCheckoutHandler
 }

@@ -17,7 +17,10 @@ return new class extends Migration
             $table->foreign('id_customer')->references('id')->on('customers');
             $table->text('resi_number')->nullable();
             $table->longText('address')->nullable();
+            $table->integer('zipcode')->nullable();
             $table->boolean('status')->default(false);
+            $table->string('payment_status')->nullable();
+            $table->longText('link')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

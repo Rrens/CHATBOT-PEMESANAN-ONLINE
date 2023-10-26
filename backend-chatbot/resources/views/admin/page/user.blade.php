@@ -64,7 +64,7 @@
                                                         class="btn btn-light-{{ $item->request_distributor == 1 ? 'warning' : 'primary' }} btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalDistributor{{ $item->id }}">
-                                                        {{ $item->request_distributor == 1 ? 'reques distributor' : 'Rubah status' }}
+                                                        {{ $item->request_distributor == 1 ? 'Request Distributor' : 'Rubah status' }}
                                                     </button>
                                                     <button class="btn btn-light-danger btn-sm" data-bs-toggle="modal"
                                                         data-bs-target="#modalBlock{{ $item->id }}">Blokir

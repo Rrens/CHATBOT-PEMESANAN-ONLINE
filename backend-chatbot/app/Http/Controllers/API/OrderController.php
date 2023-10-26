@@ -11,6 +11,8 @@ use App\Models\Promos;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class OrderController extends Controller
 {
@@ -100,8 +102,6 @@ class OrderController extends Controller
             ], 200);
         }
 
-
-
         $customer_id = Customers::where('whatsapp', $request['customer'])->first()['id'];
 
         $checkAvailableProductOnOrder = OrderDetail::with('order')
@@ -113,22 +113,14 @@ class OrderController extends Controller
 
         $data = Orders::where('id_customer', $customer_id)->where('status', 0)->first();
 
-        $checkQuantity = OrderDetail::where('id_menu', $menu->id)->where('id_order', $data->id)->first()['quantity']
-            +
-            $request['quantity'];
-        if ($checkQuantity > Menus::where('id', $menu->id)->first()['stock']) {
-            return response()->json([
-                'meta' => [
-                    'status' => 'failed',
-                    'message' => 'Out of Stock'
-                ],
-            ], 200);
-        }
+
 
         if (empty($checkAvailableProductOnOrder)) {
 
             if (empty($data)) {
+                $uniqid = floor(time() - 999999999);
                 $data = new Orders();
+                $data->id = $uniqid;
                 $data->id_customer = Customers::where('whatsapp', $request['customer'])->first()['id'];
                 $data->save();
             }
@@ -148,6 +140,19 @@ class OrderController extends Controller
             }
             $data_detail->save();
         } else {
+
+            $checkQuantity = OrderDetail::where('id_menu', $menu->id)->where('id_order', $data->id)->first()['quantity']
+                +
+                $request['quantity'];
+            if ($checkQuantity > Menus::where('id', $menu->id)->first()['stock']) {
+                return response()->json([
+                    'meta' => [
+                        'status' => 'failed',
+                        'message' => 'Out of Stock'
+                    ],
+                ], 200);
+            }
+
             $data_detail = OrderDetail::where('id_order', $data->id)
                 ->where('id_menu', $menu->id)
                 ->first();
@@ -294,8 +299,6 @@ class OrderController extends Controller
             'product' => 'required',
         ]);
 
-
-
         if ($validator->fails()) {
             return response()->json([
                 'meta' => [
@@ -330,6 +333,7 @@ class OrderController extends Controller
                     ],
                 ], 200);
             }
+
             return response()->json([
                 'meta' => [
                     'status' => 'Failed',
@@ -344,5 +348,165 @@ class OrderController extends Controller
                 ],
             ], 400);
         }
+    }
+
+    public function checK_payment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        try {
+            $data = [
+                'credit card',
+                'bca',
+                'permata',
+                'bni',
+                'bri',
+                'mandiri',
+                'danamon',
+                'other bank',
+                'gopay qris',
+                'shopeepay qris',
+                'other qris',
+                'indomaret',
+                'alfamart',
+                'kredivo',
+                'akulaku',
+            ];
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Success Fetch Data'
+                ],
+                'data' => $data
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $error->getMessage()
+                ],
+            ], 400);
+        }
+    }
+
+    public function checkout(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+            'address' => 'required|regex:([\d\sa-zA-Z,.]+)',
+            'zip_code' => 'required|regex:(\d+)'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        // return response()->json($request->all());
+        $customer = Customers::where('whatsapp', $request['customer'])->first();
+        $order = Orders::with('customer')->where('id_customer', $customer->id)->where('status', 0)->first();
+
+        if (empty($order)) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'failed',
+                    'message' => 'Order Not Found'
+                ],
+            ], 404);
+        } else {
+
+            $order->address = $request['address'];
+            $order->zipcode = $request['zip_code'];
+
+            Config::$serverKey = config('services.midtrans.serverKey');
+            Config::$isProduction = config('services.midtrans.isProduction');
+            Config::$isSanitized = config('services.midtrans.isDSanitized');
+            Config::$is3ds = config('services.midtrans,is3ds');
+
+            $midtrans = [
+                'transaction_details' => [
+                    'order_id' => $order->id,
+                    'gross_amount' => (int) OrderDetail::where('id_order', $order->id)->sum('price'),
+                ],
+                'customer_details' => [
+                    'phone' => $order->customer[0]->whatsapp,
+                ],
+                'enabled_payments' => [
+                    'gopay',
+                    'bank_transfer',
+                    'credit_card',
+                    'bca_va',
+                    'permata_va',
+                    'bni_va',
+                    'bri_va',
+                    'echannel',
+                    'cimb_va',
+                    'other_va',
+                    'gopay',
+                    'shopeepay',
+                    'other_qris',
+                    'bca_klikbca',
+                    'bca_klikpay',
+                    'cimb_clicks',
+                    'bri_epay',
+                    'danamon_online',
+                    'uob_ezpay',
+                    'indomaret',
+                    'alfamart',
+                    'kredivo',
+                    'akulaku',
+                ],
+                'vtweb' => []
+            ];
+
+            try {
+                $payment_url = Snap::createTransaction($midtrans)->redirect_url;
+                $order->link = $payment_url;
+                $order->status = 1;
+                $order->save();
+
+                return response()->json([
+                    'meta' => [
+                        'status' => 'success',
+                        'message' => 'Success Checkout'
+                    ],
+                    'data' => $order
+                ], 200);
+            } catch (Exception $error) {
+                return response()->json([
+                    'meta' => [
+                        'status' => 'error',
+                        'message' => 'Something went wrong'
+                    ],
+                    'data' => $error->getMessage()
+                ], 500);
+            }
+        }
+
+
+
+
+        return response()->json([
+            'meta' => [
+                'status' => 'Success',
+                'message' => 'Delete Order Successfully'
+            ], 'data' => $order
+        ], 200);
     }
 }

@@ -17,6 +17,10 @@ class Orders extends Model
         'id_customer',
         'resi_number',
         'address',
+        'zipcode',
+        'payment_status',
+        'status',
+        'link',
         'created_at',
         'updated_at',
     ];

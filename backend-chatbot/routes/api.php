@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\FAQController;
 use App\Http\Controllers\API\MenuController;
+use App\Http\Controllers\API\MidtransController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PromoController;
 use App\Http\Controllers\API\UserController;
@@ -35,6 +36,8 @@ Route::group([
     ], function () {
         Route::post('check-phone-number', [UserController::class, 'index']);
         Route::post('add-phone-number', [UserController::class, 'store']);
+        Route::post('status-user', [UserController::class, 'check_status']);
+        Route::post('change-status-user', [UserController::class, 'change_status']);
     });
 
     Route::group([
@@ -44,5 +47,9 @@ Route::group([
         Route::post('store-order', [OrderController::class, 'store']);
         Route::post('update-order', [OrderController::class, 'update']);
         Route::post('delete', [OrderController::class, 'delete']);
+        Route::post('check-payment', [OrderController::class, 'checK_payment']);
+        Route::post('checkout', [OrderController::class, 'checkout']);
     });
 });
+
+Route::post('midtrans/callback', [MidtransController::class, 'callback']);

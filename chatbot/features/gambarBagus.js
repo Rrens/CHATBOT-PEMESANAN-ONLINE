@@ -1,5 +1,6 @@
 const { default: axios } = require('axios');
 const { MessageMedia } = require('whatsapp-web.js');
+const { checkNumberHandler } = require('./cekNomor');
 
 const gambarBagus = async (text, msg) => {
     const chat = await msg.getChat();

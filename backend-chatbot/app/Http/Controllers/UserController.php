@@ -30,11 +30,13 @@ class UserController extends Controller
 
         if ($request->is_distributor == 1) {
             Customers::where('whatsapp', $request->whatsapp)->update([
-                'is_distributor' => 0
+                'is_distributor' => 0,
+                'request_distributor' => 0
             ]);
         } else {
             Customers::where('whatsapp', $request->whatsapp)->update([
-                'is_distributor' => 1
+                'is_distributor' => 1,
+                'request_distributor' => 0
             ]);
         }
 

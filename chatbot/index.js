@@ -9,8 +9,11 @@ const {
     orderHandler, 
     updateOrderHandler, 
     listOrder, 
-    deteleOrderHandler 
+    deteleOrderHandler, 
+    checkPaymentHandler,
+    paymentCheckoutHandler
 } = require('./features/pesanan');
+const { statusUserHandler, changeStatusHandler } = require('./features/user');
 
 
 
@@ -77,19 +80,27 @@ client.on('message', async msg => {
         await deteleOrderHandler(text, msg)
     }
 
+    if(text === 'status user'){
+        await statusUserHandler(text, msg);
+    }
+
+    if(text === 'rubah status user'){
+        await changeStatusHandler(text, msg);
+    }
+
     if(text === 'tracking'){
         // 
     }
 
-    const regexBayar = /^bayar\/([a-zA-Z\s]+)\/(\d+)$/;
-
-    if(text === regexBayar.test(text)){
-        // 
+    const regexCheckout = /^bayar\/([\d\sa-zA-Z,.]+)\/(\d{6})$/;
+    if(regexCheckout.test(text)){
+        await paymentCheckoutHandler(text, msg)
     }
 
-    if(text === 'hapus pesanan'){
-        // 
-    }
+    // const regexBayar = /^bayar\/([a-zA-Z\s]+)\/(\d+)$/;
+
+    // const regexCheckout = /^bayar\/(credit card|bca|permata|bni|bri|mandiri|danamon|other bank|gopay qris|shopeepay qris|other qris|indomaret|alfamart|kredivo|akulaku)\/(\d+)\/([a-zA-Z\s]+)\/(\d{6})$/;
+
 });
 
 client.initialize();

@@ -3,32 +3,30 @@ const { checkNumberHandler } = require("./cekNomor");
 require('dotenv').config();
 
 
-const StatusUserHandle = async (text, msg) => {
+const statusUserHandler = async (text, msg) => {
    
     const chat = await msg.getChat();
-    console.log(chat);
-    await checkNumberHandler(msg);
     try {
-        return chat.sendMessage(await StatusUserRequest());
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await statusUserRequest(phoneNumber));
         // console.log(await ListFAQ())
     } catch (error) {
         console.log(error)
     }
 }
 
-const StatusUserRequest = async (phoneNumber) => {
+const statusUserRequest = async (phoneNumber) => {
     const result = {
         success: false,
-        dataStatus: null,
         data: null,
-        message: ""
     }
 
     return await axios({
         method: 'POST',
-        url: `${process.env.BE_HOST}status-user`,
+        url: `${process.env.BE_HOST}user/status-user`,
         data: {
-            phone_number: phoneNumber
+            phone_number: phoneNumber,
         },
         headers: {
             "accept": "application/json",
@@ -36,8 +34,69 @@ const StatusUserRequest = async (phoneNumber) => {
         },
     }).then((response) => {
         console.log(response.data)
-    }).catch((response) => {
-        console.log(error.response.data)
+        const checkDistributor = response.data.data.is_distributor;
+        result.success = true
+        if(checkDistributor == 0){
+            result.data = "Anda Bukan Distributor"
+        }else{
+            result.data = "Anda Distributor"
+        }
+        return result.data;
+    }).catch((error) => {
+        console.log(error.response)
         
     })
+}
+
+const changeStatusHandler = async (text, msg) => {
+    const chat = await msg.getChat();
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await changeStatusRequest(phoneNumber));
+        // console.log(await ListFAQ())
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const changeStatusRequest = async (phoneNumber) => {
+    const result = {
+        success: false,
+        data: null,
+    }
+
+    return await axios({
+        method: 'POST',
+        url: `${process.env.BE_HOST}user/change-status-user`,
+        data: {
+            phone_number: phoneNumber,
+        },
+        headers: {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        console.log(response.data)
+        const checkRequestDistributor = response.data.data.request_distributor;
+        result.success = true
+        if(checkRequestDistributor == 1){
+            result.data = "Request Distributor sudah diajukan"
+        }else if(response.data.data.is_distributor == 1){
+            result.data = "Anda Distributor"
+        }else{
+            result.data = `Sedang ada kesalahan ini query nya ${response.data.data}`
+        }
+        return result.data;
+    }).catch((error) => {
+        console.log(error.response)
+        
+    })
+}
+
+
+
+module.exports ={
+    statusUserHandler,
+    changeStatusHandler
 }
