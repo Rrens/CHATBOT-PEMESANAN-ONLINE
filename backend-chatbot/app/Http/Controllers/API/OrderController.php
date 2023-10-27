@@ -10,6 +10,7 @@ use App\Models\Orders;
 use App\Models\Promos;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -499,14 +500,113 @@ class OrderController extends Controller
             }
         }
 
-
-
-
         return response()->json([
             'meta' => [
                 'status' => 'Success',
                 'message' => 'Delete Order Successfully'
             ], 'data' => $order
         ], 200);
+    }
+
+    public function check_order_status(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        $data_order = Orders::where('id_customer', Customers::where('whatsapp', $request['customer'])->first()['id'])
+            ->where('status', 1)
+            ->where('payment_status', null)
+            ->get();
+
+        $data_detail = OrderDetail::with('menu', 'promo')->get();
+
+
+        if (empty($data_order[0])) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => 'Data not found'
+                ],
+            ], 404);
+        }
+
+        return response()->json([
+            'meta' => [
+                'status' => 'Success',
+                'message' => 'Successfully fetch data'
+            ], 'data' => [
+                'data_order' => $data_order,
+                'data_detail' => $data_detail
+            ]
+        ], 200);
+    }
+
+    public function tracking_order(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+            'resiNumber' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        $data = Orders::where('id_customer', Customers::where('whatsapp', $request['customer'])->first()['id'])
+            ->where('resi_number', $request['resiNumber'])
+            ->where('status', 1)
+            ->first();
+        // return response()->json($data);
+
+        if (empty($data)) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => 'Data not found'
+                ],
+            ], 404);
+        }
+
+        // track?api_key=7ddf93fbc18610c85e6a9ba6b4d2f6010533dff61e8c3e562af6d22890cae384&courier=pos&awb=18022470553
+
+        try {
+            $_URL = env('API_URL_CEK_RESI') . 'track?api_key=' . env('API_KEY') . '&courier=' . $data->courier . '&awb=' . $data->resi_number;
+            // return response()->json($_URL);
+            $data_from_api = collect(Http::get($_URL)->json());
+            if (!empty($data_from_api)) {
+                $data = $data_from_api;
+            } else {
+                $data = null;
+            }
+
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Successfully fetch data'
+                ], 'data' => $data
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $error->getMessage()
+                ],
+            ], 500);
+        }
     }
 }

@@ -49,6 +49,8 @@ Route::group([
         Route::post('delete', [OrderController::class, 'delete']);
         Route::post('check-payment', [OrderController::class, 'checK_payment']);
         Route::post('checkout', [OrderController::class, 'checkout']);
+        Route::post('check-order-status', [OrderController::class, 'check_order_status']);
+        Route::post('tracking-order', [OrderController::class, 'tracking_order']);
     });
 });
 

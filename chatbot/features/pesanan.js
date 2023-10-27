@@ -289,7 +289,7 @@ const checkPaymentRequest = async (msg, phoneNumber) => {
 }
 
 const paymentCheckoutHandler = async (text, msg) => {
-     const chat = await msg.getChat();
+    const chat = await msg.getChat();
     
     try {
         const phone_number = await checkNumberHandler(msg);
@@ -328,11 +328,125 @@ const paymentCheckoutRequest = async (msg, phoneNumber) => {
     })
 }
 
+const checkOrderStatusHandler = async (text, msg) => {
+    const chat = await msg.getChat();
+    
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await checkOrderStatusRequest(msg, phoneNumber));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const checkOrderStatusRequest = async (msg, phoneNumber) => {
+    const data = {
+        phoneNumber: phoneNumber
+    }
+
+    const result = {
+        table: "",
+        status: false
+    }
+
+    return await axios({
+        method: 'POST',
+        url: `${process.env.BE_HOST}order/check-order-status`,
+        data: {
+            customer: data.phoneNumber
+        }
+    }).then((response) => {
+        let dataOrder = response.data.data.data_order
+        let dataDetail = response.data.data.data_detail
+        result.status = true
+        if (dataOrder.length === 0) {
+            result.table = "Anda tidak memiliki pesanan.";
+            return result.table;
+        }
+        result.table = `Anda memiliki ${dataOrder.length} pesanan.\n\n`;
+
+        for (let i = 0; i < dataOrder.length; i++) {
+            result.table += `Nomor Resi Order ${i + 1}: ${dataOrder[i].resi_number}\n`;
+            result.table += "Nama Barang\tHarga\t\tStok\tDiskon\n";
+            result.table += "---------------------------------------------------------\n";
+
+            let total = 0;
+            
+            for (let j = 0; j < dataDetail.length; j++) {
+                if (dataDetail[j].id_order === dataOrder[i].id) {
+                    total += parseFloat(dataDetail[j].menu[0].price);
+                    if (dataDetail[j].promo[0] === undefined) {
+                        result.table += `${dataDetail[j].menu[0].name}\tRp.${dataDetail[j].menu[0].price}\t${dataDetail[j].quantity}\n`;
+                    } else {
+                        result.table += `${dataDetail[j].menu[0].name}\tRp.${dataDetail[j].menu[0].price}\t${dataDetail[j].quantity}\t${dataDetail[j].promo[0].discount}%\n`;
+                    }
+                }
+            }
+            
+            result.table += "---------------------------------------------------------\n";
+            result.table += dataOrder.length -1  === i? `TOTAL : Rp.${total}` : `TOTAL : Rp.${total}\n\n\n`
+        }
+
+        return result.table;
+    }).catch((error) => {
+        console.log(error.response);
+    })
+}
+
+const trackingOrderHandler = async (text, msg) => {
+    const chat = await msg.getChat();
+    
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        let phoneNumber = phone_number.data;
+        return chat.sendMessage(await trackingOrderRequest(msg, phoneNumber));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const trackingOrderRequest = async (msg, phoneNumber) => {
+
+    const body = msg._data.body;
+    const cmd = body.split("/");
+
+    const data = {
+        resiNumber: cmd[1],
+        phoneNumber: phoneNumber
+    }
+    // console.log(data)
+
+    const result = {
+        table: "",
+        status: false
+    }
+
+    return await axios({
+        method: 'POST',
+        url: `${process.env.BE_HOST}order/tracking-order`,
+        data: {
+            customer: data.phoneNumber,
+            resiNumber: data.resiNumber
+        }
+    }).then((response) => {
+        const data_length = response.data.data.data.history.length;
+        console.log(response.data.data.data.history[data_length - 1])
+        // let data = response.data
+        // console.log(data)
+        // return result.table;
+    }).catch((error) => {
+        console.log(error.response.data);
+    })
+}
+
 module.exports = {
     listOrder,
     orderHandler,
     updateOrderHandler,
     deteleOrderHandler,
     checkPaymentHandler,
-    paymentCheckoutHandler
+    paymentCheckoutHandler,
+    checkOrderStatusHandler,
+    trackingOrderHandler
 }

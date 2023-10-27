@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PromoController;
@@ -42,4 +43,11 @@ Route::group([
     Route::post('', [PromoController::class, 'store'])->name('promo.store');
     Route::post('update', [PromoController::class, 'update'])->name('promo.update');
     Route::post('delete', [PromoController::class, 'delete'])->name('promo.delete');
+});
+
+Route::group([
+    'prefix' => 'order',
+], function () {
+    Route::get('', [OrderController::class, 'index'])->name('order.index');
+    Route::post('resi-order', [OrderController::class, 'resi_order'])->name('order.resi');
 });

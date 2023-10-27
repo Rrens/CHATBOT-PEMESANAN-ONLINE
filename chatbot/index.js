@@ -11,7 +11,9 @@ const {
     listOrder, 
     deteleOrderHandler, 
     checkPaymentHandler,
-    paymentCheckoutHandler
+    paymentCheckoutHandler,
+    checkOrderStatusHandler,
+    trackingOrderHandler
 } = require('./features/pesanan');
 const { statusUserHandler, changeStatusHandler } = require('./features/user');
 
@@ -27,8 +29,20 @@ client.on('qr', qr => {
     qrcode.generate(qr, { small: true });
 });
 
-client.on('ready', () => {
+client.on('ready', async msg => {
     console.log('Client is ready!');
+    // try {
+    //     const nomorPenerima = '6281216913886';
+    //     const pesan = 'Testing';
+    //     // const chat = await msg.getChat();
+    //     console.log(nomorPenerima)
+    //     console.log(pesan)
+    //     console.log(msg)
+        
+    // } catch (error) {
+    //     console.log(error)
+    // }
+    // client.sendMessage(nomorPenerima, pesan);
 });
 
 client.on('message', async msg => {
@@ -64,6 +78,10 @@ client.on('message', async msg => {
         await listOrder(text, msg)
     }
 
+    if(text == 'cek pesanan'){
+        await checkOrderStatusHandler(text, msg)
+    }
+
     const regexOrder = /^pilih\/(\w+\s\w+)\/(\d+)$/;
 
     if(regexOrder.test(text)){
@@ -88,8 +106,8 @@ client.on('message', async msg => {
         await changeStatusHandler(text, msg);
     }
 
-    if(text === 'tracking'){
-        // 
+    if(text.includes('tracking/')){
+        await trackingOrderHandler(text, msg)
     }
 
     const regexCheckout = /^bayar\/([\d\sa-zA-Z,.]+)\/(\d{6})$/;

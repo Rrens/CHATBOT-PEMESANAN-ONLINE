@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_customer')->nullable();
             $table->foreign('id_customer')->references('id')->on('customers');
+            $table->text('courier')->nullable();
             $table->text('resi_number')->nullable();
             $table->longText('address')->nullable();
             $table->integer('zipcode')->nullable();

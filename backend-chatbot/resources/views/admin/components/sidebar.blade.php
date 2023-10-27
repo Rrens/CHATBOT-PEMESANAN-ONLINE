@@ -66,8 +66,8 @@
                         <span>Promo</span>
                     </a>
                 </li>
-                <li class="sidebar-item  {{ $active == 'contact' ? 'active' : '' }}">
-                    <a href="" class="sidebar-link">
+                <li class="sidebar-item  {{ $active == 'order' ? 'active' : '' }}">
+                    <a href="{{ route('order.index') }}" class="sidebar-link">
                         <i class="bi bi-cart-fill"></i>
                         <span>Pesanan</span>
                     </a>
