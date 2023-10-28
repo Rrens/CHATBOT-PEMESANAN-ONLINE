@@ -81,11 +81,7 @@ class OrderController extends Controller
 
         $menu = Menus::where('name', $request['product'])->first();
 
-        $check_stock = Menus::where('id', $menu->id)->where('stock', '>=', $request['quantity'])->first();
-
-
-        // CHECK PRODUCT
-        if (empty(Menus::where('name', $request['product'])->first())) {
+        if (empty($menu)) {
             return response()->json([
                 'meta' => [
                     'status' => 'failed',
@@ -94,6 +90,9 @@ class OrderController extends Controller
             ], 200);
         }
 
+        $check_stock = Menus::where('id', $menu->id)->where('stock', '>=', $request['quantity'])->first();
+
+        // CHECK PRODUCT
         if (empty($check_stock)) {
             return response()->json([
                 'meta' => [
@@ -157,7 +156,6 @@ class OrderController extends Controller
             $data_detail = OrderDetail::where('id_order', $data->id)
                 ->where('id_menu', $menu->id)
                 ->first();
-            // $data_detail->id_menu = $menu->id;
             $data_detail->quantity += (int) $request['quantity'];
             if (!empty($promo)) {
                 $data_detail->id_promo = $promo->id;
@@ -581,8 +579,6 @@ class OrderController extends Controller
                 ],
             ], 404);
         }
-
-        // track?api_key=7ddf93fbc18610c85e6a9ba6b4d2f6010533dff61e8c3e562af6d22890cae384&courier=pos&awb=18022470553
 
         try {
             $_URL = env('API_URL_CEK_RESI') . 'track?api_key=' . env('API_KEY') . '&courier=' . $data->courier . '&awb=' . $data->resi_number;

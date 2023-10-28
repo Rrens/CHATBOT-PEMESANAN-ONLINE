@@ -31,25 +31,28 @@ const listOrderRequest = async (msg, phoneNumber) => {
         },
     }).then((response) => {
         const dataOrder = response.data.data.order;
-        console.log(dataOrder);
-        
-        let total = 0;
-        result.success = 'SUCCESS';
-        result.table = `ID ORDER : ${dataOrder[0].id_order}\n`
-        result.table += "Nama Barang\tHarga\t\tStok\tDiskon\n";
-        result.table += "---------------------------------------------------------\n";
-        for (let i = 0; i < dataOrder.length; i++) {
-            total += parseFloat(dataOrder[i].price)
-            if(dataOrder[i].promo[0] == undefined){
-                result.table += `${dataOrder[i].menu[0].name}\tRp.${dataOrder[i].menu[0].price}\t${dataOrder[i].quantity}\n`;
-            }else{
-                result.table += `${dataOrder[i].menu[0].name}\tRp.${dataOrder[i].menu[0].price}\t${dataOrder[i].quantity}\t${dataOrder[i].promo[0].discount}%\n`;
+        // console.log(dataOrder[0] == null);
+        if(dataOrder[0] == null){
+            return 'Tidak ada pesanan'
+        }else{
+            let total = 0;
+            result.success = 'SUCCESS';
+            result.table = `ID ORDER : ${dataOrder[0].id_order}\n`
+            result.table += "Nama Barang\tHarga\t\tStok\tDiskon\n";
+            result.table += "---------------------------------------------------------\n";
+            for (let i = 0; i < dataOrder.length; i++) {
+                total += parseFloat(dataOrder[i].price)
+                if(dataOrder[i].promo[0] == undefined){
+                    result.table += `${dataOrder[i].menu[0].name}\tRp.${dataOrder[i].menu[0].price}\t${dataOrder[i].quantity}\n`;
+                }else{
+                    result.table += `${dataOrder[i].menu[0].name}\tRp.${dataOrder[i].menu[0].price}\t${dataOrder[i].quantity}\t${dataOrder[i].promo[0].discount}%\n`;
+                }
             }
+            result.table += "---------------------------------------------------------\n";
+            result.table += `TOTAL : Rp.${total}`
+            
+            return result.table;
         }
-        result.table += "---------------------------------------------------------\n";
-        result.table += `TOTAL : Rp.${total}`
-        
-        return result.table;
     }).catch((error) => {
         console.log(error.response)
         
@@ -227,7 +230,7 @@ const deleteOrderRequest = async (msg, phoneNumber) => {
         result.status = "SUCCESS",
         // result.message = 
         result.data = response.data
-        console.log(result.data);
+        return `Berhasil Menghapus ${product}`
     }).catch((error) => {
         console.log(error.response);
     })
@@ -430,13 +433,16 @@ const trackingOrderRequest = async (msg, phoneNumber) => {
             resiNumber: data.resiNumber
         }
     }).then((response) => {
+        const data_api = response.data.data.data;
         const data_length = response.data.data.data.history.length;
-        console.log(response.data.data.data.history[data_length - 1])
-        // let data = response.data
-        // console.log(data)
-        // return result.table;
+        result.table = `NAMA EKSPEDISI: ${data_api.summary.courier}\n`
+        result.table += `NOMOR RESI: ${data_api.summary.awb}\n`
+        result.table += `${data_api.detail.shipper} \n${data_api.detail.receiver}`
+        result.table += `\n\n Status Pengiriman: \n LOKASI: ${data_api.history[data_length - 1].date}\n KETERANGAN: ${data_api.history[data_length - 1].desc}`
+        return result.table;
     }).catch((error) => {
-        console.log(error.response.data);
+        // console.log(error.response.data.meta.message);
+        return error.response.data.meta.message;
     })
 }
 

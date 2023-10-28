@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menus;
+use App\Models\OrderDetail;
 use App\Models\Orders;
 use Illuminate\Http\Request;
 use Midtrans\Config;
@@ -26,6 +28,8 @@ class MidtransController extends Controller
 
         $transaction = Orders::findOrFail($order_id);
 
+
+
         if ($status == 'capture') {
             if ($type == 'credit_card') {
                 if ($fraud == 'challenge') {
@@ -36,6 +40,12 @@ class MidtransController extends Controller
             }
         } else if ($status == 'settlement') {
             $transaction->payment_status = 'SUCCESS';
+            $order_detail = OrderDetail::where('id_order', $order_id)->get();
+            foreach ($order_detail as $item) {
+                $menu = Menus::findOrFail($item->id_menu);
+                $menu->quantity -= $item->quantity;
+                $menu->save();
+            }
         } else if ($status == 'pending') {
             $transaction->payment_status = 'PENDING';
         } else if ($status == 'deny') {
