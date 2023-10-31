@@ -50,4 +50,5 @@ Route::group([
 ], function () {
     Route::get('', [OrderController::class, 'index'])->name('order.index');
     Route::post('resi-order', [OrderController::class, 'resi_order'])->name('order.resi');
+    Route::get('tracking/{id}', [OrderController::class, 'tracking'])->name('order.tracking');
 });

@@ -20,9 +20,6 @@ class OrderController extends Controller
         $_URL = env('API_URL_CEK_RESI') . 'list_courier?api_key=' . env('API_KEY');
         $data_list_courier = collect(Http::get($_URL)->json());
 
-        // dd($data_list_courier);
-        // https: //api.binderbyte.com/v1/list_courier?api_key=cb978c0a4a9574dafcxxxxxxxxxxxxxxxxxxxx
-        // dd($data_detail);
         return view('admin.page.order', compact('active', 'data', 'data_detail', 'data_list_courier'));
     }
 
@@ -47,5 +44,19 @@ class OrderController extends Controller
 
         Alert::toast('Sukses Menambah Nomor Resi', 'success');
         return back();
+    }
+
+    public function tracking($id)
+    {
+        $data = Orders::where('id', $id)
+            ->first();
+
+        if (empty($data)) {
+            Alert::toast('Tracking tidak ada', 'error');
+            return back();
+        }
+        $_URL = env('API_URL_CEK_RESI') . 'track?api_key=' . env('API_KEY') . '&courier=' . $data->courier . '&awb=' . $data->resi_number;
+        $data_api = collect(Http::get($_URL)->json());
+        return response()->json($data_api);
     }
 }

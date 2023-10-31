@@ -478,6 +478,13 @@ class OrderController extends Controller
                 $payment_url = Snap::createTransaction($midtrans)->redirect_url;
                 $order->link = $payment_url;
                 $order->status = 1;
+                // HAPUS KETIKA SUDAH DI HOSTING
+                $order_detail = OrderDetail::where('id_order', $order->id)->get();
+                foreach ($order_detail as $item) {
+                    $menu = Menus::findOrFail($item->id_menu);
+                    $menu->quantity -= $item->quantity;
+                    $menu->save();
+                }
                 $order->save();
 
                 return response()->json([
