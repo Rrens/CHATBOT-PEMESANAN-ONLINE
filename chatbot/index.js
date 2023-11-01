@@ -27,6 +27,8 @@ const client = new Client({
 
 client.on('qr', qr => {
     qrcode.generate(qr, { small: true });
+
+    // console.log(qr);
 });
 
 client.on('ready', async msg => {
@@ -60,6 +62,41 @@ client.on('message', async msg => {
 
     if(text === 'berikan gambar terbaik'){
         await gambarBagus(text, msg)
+    }
+
+     const salamArray = ['hallo', 'halo', 'p', 'hai', 'hi', 'selamat', 'pagi', 'sore', 'malam', 'hay', 'hello', 'greetings'];
+
+    // let isSalam = false;
+
+    // for(let salam of salamArray){
+    //     if(text === salam) {
+    //         isSalam = true;
+    //         break;
+    //     }
+    // }
+
+    // if(isSalam){
+    //     msg.reply(`Terima kasih telah menggunakan Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
+    // - faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
+    // - promo (untuk melihat promo yang sedang berjalan) 
+    // - menu (untuk melihat daftar menu) 
+    // - pilih/{nama barang}/{banyak barang} (untuk menambahkan barang ke keranjang) 
+    // - status user (untuk melihat status pengguna saat ini) 
+
+    // Contoh penggunaan:
+    // - pilih/sambal ijo/10`);
+    // }
+
+    if (salamArray.some(salam => text === salam)) {
+        msg.reply(`Terima kasih telah menggunakan Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
+- faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
+- promo (untuk melihat promo yang sedang berjalan) 
+- menu (untuk melihat daftar menu) 
+- pilih/{nama barang}/{banyak barang} (untuk menambahkan barang ke keranjang) 
+- status user (untuk melihat status pengguna saat ini) 
+
+Contoh penggunaan:
+- pilih/sambal ijo/10`);
     }
 
     if(text === 'faq'){

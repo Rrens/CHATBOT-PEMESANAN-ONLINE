@@ -3,7 +3,7 @@
 use App\Http\Controllers\API\FAQController;
 use App\Http\Controllers\API\MenuController;
 use App\Http\Controllers\API\MidtransController;
-use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\OrderController as APIORDERContoller;
 use App\Http\Controllers\API\PromoController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
@@ -43,14 +43,14 @@ Route::group([
     Route::group([
         'prefix' => 'order'
     ], function () {
-        Route::post('list-order', [OrderController::class, 'index']);
-        Route::post('store-order', [OrderController::class, 'store']);
-        Route::post('update-order', [OrderController::class, 'update']);
-        Route::post('delete', [OrderController::class, 'delete']);
-        Route::post('check-payment', [OrderController::class, 'checK_payment']);
-        Route::post('checkout', [OrderController::class, 'checkout']);
-        Route::post('check-order-status', [OrderController::class, 'check_order_status']);
-        Route::post('tracking-order', [OrderController::class, 'tracking_order']);
+        Route::post('list-order', [APIORDERContoller::class, 'index']);
+        Route::post('store-order', [APIORDERContoller::class, 'store']);
+        Route::post('update-order', [APIORDERContoller::class, 'update']);
+        Route::post('delete', [APIORDERContoller::class, 'delete']);
+        Route::post('check-payment', [APIORDERContoller::class, 'checK_payment']);
+        Route::post('checkout', [APIORDERContoller::class, 'checkout']);
+        Route::post('check-order-status', [APIORDERContoller::class, 'check_order_status']);
+        Route::post('tracking-order', [APIORDERContoller::class, 'tracking_order']);
     });
 });
 

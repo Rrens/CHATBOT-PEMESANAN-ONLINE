@@ -482,7 +482,7 @@ class OrderController extends Controller
                 $order_detail = OrderDetail::where('id_order', $order->id)->get();
                 foreach ($order_detail as $item) {
                     $menu = Menus::findOrFail($item->id_menu);
-                    $menu->quantity -= $item->quantity;
+                    $menu->stock -= $item->quantity;
                     $menu->save();
                 }
                 $order->save();

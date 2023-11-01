@@ -54,7 +54,8 @@ const listOrderRequest = async (msg, phoneNumber) => {
             return result.table;
         }
     }).catch((error) => {
-        console.log(error.response)
+        console.log(error.response.data.meta.message)
+        return error.response.data.meta.message
         
     })
 }
@@ -117,7 +118,8 @@ const orderRequest = async (msg, phoneNumber) => {
                 }
             }
             result.table += "---------------------------------------------------------\n";
-            result.table += `TOTAL : Rp.${total}`
+            result.table += `TOTAL : Rp.${total}\n`
+            result.table += `Untuk melakukan pembayaran seperti ini`
             
             return result.table;
         }
