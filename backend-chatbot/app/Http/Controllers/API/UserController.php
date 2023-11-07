@@ -12,7 +12,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        // return response()->json($request['phoneNumber']);
         $validator = Validator::make($request->all(), [
             'phoneNumber' => 'required',
         ]);
@@ -35,6 +34,16 @@ class UserController extends Controller
                 ],
             ], 201);
         }
+
+        if ($check_phone_number->is_block == 1) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Customer Is Blocked'
+                ],
+            ], 200);
+        }
+
 
         return response()->json([
             'meta' => [

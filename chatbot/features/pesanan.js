@@ -8,8 +8,11 @@ const listOrder = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await listOrderRequest(msg, phoneNumber));
+    
+        if(phoneNumber.body != 'Customer Is Blocked'){
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await listOrderRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -65,8 +68,10 @@ const orderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await orderRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await orderRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -135,8 +140,11 @@ const updateOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await updateOrderRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await updateOrderRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
         
@@ -203,8 +211,11 @@ const deteleOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await deleteOrderRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await deleteOrderRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -243,8 +254,11 @@ const checkPaymentHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await checkPaymentRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await checkPaymentRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -298,8 +312,11 @@ const paymentCheckoutHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await paymentCheckoutRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await paymentCheckoutRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -338,8 +355,11 @@ const checkOrderStatusHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await checkOrderStatusRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await checkOrderStatusRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }
@@ -404,8 +424,11 @@ const trackingOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
-        return chat.sendMessage(await trackingOrderRequest(msg, phoneNumber));
+        if(phoneNumber.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number.data;
+            return chat.sendMessage(await trackingOrderRequest(msg, phoneNumber));
+        }
     } catch (error) {
         console.log(error)
     }

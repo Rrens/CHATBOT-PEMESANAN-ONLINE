@@ -5,13 +5,16 @@ require('dotenv').config();
 const ListFaqHandler = async(text, msg) => {
 
     const chat = await msg.getChat();
-    await checkNumberHandler(msg);
+    let checkNumber = await checkNumberHandler(msg);
     
-    try {
-        return chat.sendMessage(await ListFAQRequest());
-    } catch (error) {
-        console.log(error)
+    if(checkNumber.body != 'Customer Is Blocked'){
+        try {
+            return chat.sendMessage(await ListFAQRequest());
+        } catch (error) {
+            console.log(error)
+        }
     }
+    
 }
 
 const ListFAQRequest = async () => {
@@ -29,6 +32,7 @@ const ListFAQRequest = async () => {
     }).then((response) => {
         if(response.status == 404){
             console.log(response.data)
+            result.data = response.data.meta.message
         }
         if(response.status == 200){
             let resultCombined = '';
@@ -52,6 +56,7 @@ const ListFAQRequest = async () => {
     })
     .catch((error) => {
         console.log(error.response.data)
+        return error.response.data.meta.message;
         
     })
 }

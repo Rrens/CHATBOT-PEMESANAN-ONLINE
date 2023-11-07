@@ -30,18 +30,19 @@ client.on('qr', qr => {
 
 client.on('ready', async msg => {
     console.log('Client is ready!');
-    // try {
-    //     const nomorPenerima = '6281216913886';
-    //     const pesan = 'Testing';
-    //     // const chat = await msg.getChat();
-    //     console.log(nomorPenerima)
-    //     console.log(pesan)
-    //     console.log(msg)
-        
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // client.sendMessage(nomorPenerima, pesan);
+    
+  // Number where you want to send the message.
+    // const number = "+6281216913886";
+
+    // // Your message.
+    // const text = "Hey john";
+
+    // // Getting chatId from the number.
+    // // we have to delete "+" from the beginning and add "@c.us" at the end of the number.
+    // const chatId = number.substring(1) + "@c.us";
+
+    // Sending message.
+    // client.sendMessage(chatId, text);
 });
 
 client.on('message', async msg => {
@@ -50,7 +51,7 @@ client.on('message', async msg => {
 
     //check status
     if(text === 'cek'){
-        await checkNumberHandler(text, msg)
+        await checkNumberHandler(msg)
     }
     
     if (text === 'p') {

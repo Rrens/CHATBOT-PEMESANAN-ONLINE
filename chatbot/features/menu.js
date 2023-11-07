@@ -5,13 +5,16 @@ require('dotenv').config();
 const ListMenuHandler = async (text, msg) => {
     const chat = await msg.getChat();
 
-    await checkNumberHandler(msg);
-
-    try {
-        return chat.sendMessage(await ListMenu());
-    } catch (error) {
-        console.log(error);
+    let checkNumber = await checkNumberHandler(msg);
+    
+    if(checkNumber.body != 'Customer Is Blocked'){
+        try {
+            return chat.sendMessage(await ListMenu());
+        } catch (error) {
+            console.log(error);
+        }
     }
+
 }
 
 const ListMenu = async () => {

@@ -5,11 +5,12 @@ const checkNumberHandler = async (msg) => {
     // const chat = await msg.getChat();
     const message_from = msg._data.from;
     const cmd = message_from.split("@");
+    const chat = await msg.getChat();
 
     let phoneNumber = cmd[0];
 
     try {
-        return await checkNumberRequest(phoneNumber);
+        return await checkNumberRequest(phoneNumber) === 'Customer Is Blocked' ? chat.sendMessage(await checkNumberRequest(phoneNumber)) : '';
     } catch (error) {
         console.log(error);
     }
@@ -35,13 +36,18 @@ const checkNumberRequest = async (phoneNumber) => {
         }
     }).then(async (response) => {
         
-        if(response.data.meta.message !== 'Not Found'){
+        if(response.data.meta.message === 'Customer Is Blocked'){
+            result.success = false;
+            result.message = response.data.meta.message;
+            // console.log(result.message)
+            return result.message
+        }else if(response.data.meta.message !== 'Not Found'){
             result.success = true;
             result.message = response.data.meta.message;
-            result.data = response.data.data.whatsapp;
+            // result.data = response.data.data.whatsapp;
             return result;
-        }else{
             
+        }else{
             result.success = true;
             result.data = await addPhoneNumber(phoneNumber);
             return result;

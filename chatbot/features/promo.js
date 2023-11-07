@@ -13,12 +13,16 @@ const ListPromoHandler = async (text, msg) => {
     //     hasil += `${arrayBarang[i]} diskon ${arrayPromo[i]}%\n`;
         
     // }
+    let checkNumber = await checkNumberHandler(msg);
     
-    try {
-        return chat.sendMessage(await listPromoRequest());
-    } catch (error) {
-        console.log(error);
+    if(checkNumber.body != 'Customer Is Blocked'){
+        try {
+            return chat.sendMessage(await listPromoRequest());
+        } catch (error) {
+            console.log(error);
+        }
     }
+    
 }
 
 const listPromoRequest = async () => {
