@@ -10,7 +10,10 @@ const checkNumberHandler = async (msg) => {
     let phoneNumber = cmd[0];
 
     try {
-        return await checkNumberRequest(phoneNumber) === 'Customer Is Blocked' ? chat.sendMessage(await checkNumberRequest(phoneNumber)) : '';
+        return await checkNumberRequest(phoneNumber) === 'Customer Is Blocked' ? 
+        chat.sendMessage(await checkNumberRequest(phoneNumber)) 
+        : 
+        await checkNumberRequest(phoneNumber);
     } catch (error) {
         console.log(error);
     }
@@ -44,8 +47,8 @@ const checkNumberRequest = async (phoneNumber) => {
         }else if(response.data.meta.message !== 'Not Found'){
             result.success = true;
             result.message = response.data.meta.message;
-            // result.data = response.data.data.whatsapp;
-            return result;
+            result.data = response.data.data.whatsapp;
+            return result.data;
             
         }else{
             result.success = true;

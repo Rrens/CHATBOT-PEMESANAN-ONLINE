@@ -1,18 +1,10 @@
 const { default: axios } = require("axios");
+const { checkNumberHandler } = require("./cekNomor");
 require('dotenv').config();
 
 const ListPromoHandler = async (text, msg) => {
     const chat = await msg.getChat();
 
-    // let arrayBarang = ['nasi goreng', 'mie goreng'];
-    // let arrayPromo = [10, 20];
-
-    // let hasil = '';
-
-    // for (let i = 0; i < arrayBarang.length; i++) {
-    //     hasil += `${arrayBarang[i]} diskon ${arrayPromo[i]}%\n`;
-        
-    // }
     let checkNumber = await checkNumberHandler(msg);
     
     if(checkNumber.body != 'Customer Is Blocked'){

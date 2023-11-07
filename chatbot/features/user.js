@@ -9,7 +9,7 @@ const statusUserHandler = async (text, msg) => {
     try {
         const phone_number = await checkNumberHandler(msg);
         if(phone_number.body != 'Customer Is Blocked'){
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await statusUserRequest(phoneNumber));
         }
     } catch (error) {
@@ -53,7 +53,7 @@ const changeStatusHandler = async (text, msg) => {
     const chat = await msg.getChat();
     try {
         const phone_number = await checkNumberHandler(msg);
-        let phoneNumber = phone_number.data;
+        let phoneNumber = phone_number;
         return chat.sendMessage(await changeStatusRequest(phoneNumber));
         // console.log(await ListFAQ())
     } catch (error) {

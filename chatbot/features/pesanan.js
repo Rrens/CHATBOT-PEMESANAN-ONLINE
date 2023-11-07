@@ -8,9 +8,8 @@ const listOrder = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-    
-        if(phoneNumber.body != 'Customer Is Blocked'){
-            let phoneNumber = phone_number.data;
+        if(phone_number.body != 'Customer Is Blocked'){
+            let phoneNumber = phone_number;
             return chat.sendMessage(await listOrderRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -68,8 +67,8 @@ const orderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
-            let phoneNumber = phone_number.data;
+        if(phone_number.body != 'Customer Is Blocked'){
+            let phoneNumber = phone_number;
             return chat.sendMessage(await orderRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -140,9 +139,9 @@ const updateOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await updateOrderRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -211,9 +210,9 @@ const deteleOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await deleteOrderRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -254,9 +253,9 @@ const checkPaymentHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await checkPaymentRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -312,9 +311,9 @@ const paymentCheckoutHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await paymentCheckoutRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -355,9 +354,9 @@ const checkOrderStatusHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await checkOrderStatusRequest(msg, phoneNumber));
         }
     } catch (error) {
@@ -424,9 +423,9 @@ const trackingOrderHandler = async (text, msg) => {
     
     try {
         const phone_number = await checkNumberHandler(msg);
-        if(phoneNumber.body != 'Customer Is Blocked'){
+        if(phone_number.body != 'Customer Is Blocked'){
 
-            let phoneNumber = phone_number.data;
+            let phoneNumber = phone_number;
             return chat.sendMessage(await trackingOrderRequest(msg, phoneNumber));
         }
     } catch (error) {
