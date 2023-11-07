@@ -5,6 +5,8 @@ const {  ListMenuHandler } = require('./features/menu');
 const { ListPromoHandler } = require('./features/promo');
 const { gambarBagus } = require('./features/gambarBagus');
 const { checkNumberHandler } = require('./features/cekNomor');
+const { statusUserHandler, changeStatusHandler } = require('./features/user');
+
 const { 
     orderHandler, 
     updateOrderHandler, 
@@ -15,15 +17,10 @@ const {
     checkOrderStatusHandler,
     trackingOrderHandler
 } = require('./features/pesanan');
-const { statusUserHandler, changeStatusHandler } = require('./features/user');
-
-
 
 const client = new Client({
     authStrategy: new LocalAuth()
 });
-
-
 
 client.on('qr', qr => {
     qrcode.generate(qr, { small: true });
@@ -86,7 +83,7 @@ client.on('message', async msg => {
     // Contoh penggunaan:
     // - pilih/sambal ijo/10`);
     // }
-
+``
     if (salamArray.some(salam => text === salam)) {
         msg.reply(`Terima kasih telah menggunakan Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
 - faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
