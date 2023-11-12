@@ -10,6 +10,7 @@ use App\Models\Orders;
 use App\Models\Promos;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
@@ -45,7 +46,7 @@ class OrderController extends Controller
             return response()->json([
                 'meta' => [
                     'status' => 'Success',
-                    'message' => 'Order Successfully'
+                    'message' => 'Order Fetch Successfully'
                 ],
                 'data' => [
                     'order' => $data,
@@ -511,6 +512,52 @@ class OrderController extends Controller
                 'message' => 'Delete Order Successfully'
             ], 'data' => $order
         ], 200);
+    }
+
+    public function list_order_per_date(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'customer' => 'required',
+            'date' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Failed',
+                    'message' => $validator->messages()->all()
+                ]
+            ], 400);
+        }
+
+        $date = $request['date'];
+
+        $data_order = Orders::whereRaw("DATE_FORMAT(created_at, '%d-%m-%Y') = ?", date('d-m-Y', strtotime($date)))
+            ->where('status', 1)
+            ->where('payment_status', null)
+            ->get();
+
+        $data_detail = OrderDetail::with('menu', 'promo')->get();
+
+        if (!empty($data_order[0])) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'Success',
+                    'message' => 'Order Fetch Successfully'
+                ],
+                'data' => [
+                    'data_order' => $data_order,
+                    'data_detail' => $data_detail
+                ]
+            ], 200);
+        }
+
+        return response()->json([
+            'meta' => [
+                'status' => 'Success',
+                'message' => 'Order Not Found'
+            ],
+        ], 404);
     }
 
     public function check_order_status(Request $request)

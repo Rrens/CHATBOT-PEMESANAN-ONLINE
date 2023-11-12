@@ -6,6 +6,7 @@ const ListMenuHandler = async (text, msg) => {
     const chat = await msg.getChat();
 
     let checkNumber = await checkNumberHandler(msg);
+    console.log(checkNumber)
     
     if(checkNumber.body != 'Customer Is Blocked'){
         try {
@@ -41,7 +42,11 @@ const ListMenu = async () => {
             for (let i = 0; i < arrayData.length; i++) {
                 result.table += `${arrayData[i].name}\tRp.${arrayData[i].price}\t${arrayData[i].stock}\n`;
             }
-            result.table += "---------------------------------------------";
+            result.table += `---------------------------------------------\n\n`;
+            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Contoh Penggunaan: \n`
+            result.table += `pilih/sambal ijo/10`;
         }
         // console.log(result.table)
         return result.table

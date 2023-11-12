@@ -51,7 +51,17 @@ const listOrderRequest = async (msg, phoneNumber) => {
                 }
             }
             result.table += "---------------------------------------------------------\n";
-            result.table += `TOTAL : Rp.${total}`
+            result.table += `TOTAL : Rp.${total}\n\n`
+            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Merubah Pesanan\n`;
+            result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Menghapus Pesanan\n`;
+            result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Contoh Penggunaan: \n`
+            result.table += `pilih/sambal ijo/10\n`;
+            result.table += `rubah/sambal ijo/10\n`;
+            result.table += `hapus/sambal ijo`;
             
             return result.table;
         }
@@ -122,8 +132,17 @@ const orderRequest = async (msg, phoneNumber) => {
                 }
             }
             result.table += "---------------------------------------------------------\n";
-            result.table += `TOTAL : Rp.${total}\n`
-            result.table += `Untuk melakukan pembayaran seperti ini`
+            result.table += `TOTAL : Rp.${total}\n\n`
+            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Merubah Pesanan\n`;
+            result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Menghapus Pesanan\n`;
+            result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Contoh Penggunaan: \n`
+            result.table += `pilih/sambal ijo/10\n`;
+            result.table += `rubah/sambal ijo/10\n`;
+            result.table += `hapus/sambal ijo`;
             
             return result.table;
         }
@@ -131,7 +150,6 @@ const orderRequest = async (msg, phoneNumber) => {
         console.log(error.response.data)
         
     })
-
 }
 
 const updateOrderHandler = async (text, msg) => {
@@ -196,7 +214,17 @@ const updateOrderRequest = async (msg, phoneNumber) => {
                 }
             }
             result.table += "---------------------------------------------------------\n";
-            result.table += `TOTAL : Rp.${total}`
+            result.table += `TOTAL : Rp.${total}\n\n`
+            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Merubah Pesanan\n`;
+            result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
+            result.table += `Untuk Menghapus Pesanan\n`;
+            result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Contoh Penggunaan: \n`
+            result.table += `pilih/sambal ijo/10\n`;
+            result.table += `rubah/sambal ijo/10\n`;
+            result.table += `hapus/sambal ijo`;
             
             return result.table;
         }
@@ -349,6 +377,20 @@ const paymentCheckoutRequest = async (msg, phoneNumber) => {
     })
 }
 
+function formatDateTime(inputDate) {
+    const date = new Date(inputDate);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
+
+    return formattedDate;
+}
+
 const checkOrderStatusHandler = async (text, msg) => {
     const chat = await msg.getChat();
     
@@ -391,6 +433,7 @@ const checkOrderStatusRequest = async (msg, phoneNumber) => {
         result.table = `Anda memiliki ${dataOrder.length} pesanan.\n\n`;
 
         for (let i = 0; i < dataOrder.length; i++) {
+            result.table += `Tanggal : ${formatDateTime(dataOrder[i].created_at)}\n`;
             result.table += `Nomor Resi Order ${i + 1}: ${dataOrder[i].resi_number}\n`;
             result.table += "Nama Barang\tHarga\t\tStok\tDiskon\n";
             result.table += "---------------------------------------------------------\n";
@@ -412,9 +455,99 @@ const checkOrderStatusRequest = async (msg, phoneNumber) => {
             result.table += dataOrder.length -1  === i? `TOTAL : Rp.${total}` : `TOTAL : Rp.${total}\n\n\n`
         }
 
+        result.table += `\n\nUntuk Melakukan Tracking Pesanan\n`;
+        result.table += `tracking/{nomor resi}\n\n`;
+        result.table += `Contoh Penggunaan: \n`
+        result.table += `tracking/12388499392`;
         return result.table;
     }).catch((error) => {
         console.log(error.response);
+    })
+}
+
+const checkOrderStatusPerDateHandler = async (text, msg) => {
+    const chat = await msg.getChat();
+
+    try {
+        const phone_number = await checkNumberHandler(msg);
+        if(phone_number.body != 'Customer Is Blocked'){
+
+            let phoneNumber = phone_number;
+            return chat.sendMessage(await checkOrderStatusPerDateRequest(msg, phoneNumber));
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const checkOrderStatusPerDateRequest = async (msg, phoneNumber) => {
+    const body = msg._data.body;
+    const cmd = body.split("/");
+    const date = cmd[1];
+
+    const regex = /^\d{1,2}-\d{2}-\d{4}$/;
+    const isMatch = regex.test(date);
+
+    if(!isMatch){
+        return `Perintah salah \n\ncommand yang benar\nriwayat/12-03-2023`
+    }
+    
+
+    const result = {
+        status: false,
+        message: "",
+        data: "",
+    }
+
+    return await axios({
+        method: "POST",
+        url: `${process.env.BE_HOST}order/list-order-per-date`,
+        data: {
+            customer: phoneNumber,
+            date: date
+        }
+    }).then((response) => {
+        let dataOrder = response.data.data.data_order
+        let dataDetail = response.data.data.data_detail
+        result.status = true
+        if (dataOrder.length === 0) {
+            result.table = "Anda tidak memiliki pesanan.";
+            return result.table;
+        }
+        result.table = `Anda memiliki ${dataOrder.length} pesanan.\n\n`;
+
+        for (let i = 0; i < dataOrder.length; i++) {
+            result.table += `Tanggal : ${formatDateTime(dataOrder[i].created_at)}\n`;
+            result.table += `Nomor Resi Order ${i + 1}: ${dataOrder[i].resi_number}\n`;
+            result.table += "Nama Barang\tHarga\t\tStok\tDiskon\n";
+            result.table += "---------------------------------------------------------\n";
+
+            let total = 0;
+            
+            for (let j = 0; j < dataDetail.length; j++) {
+                if (dataDetail[j].id_order === dataOrder[i].id) {
+                    total += parseFloat(dataDetail[j].menu[0].price);
+                    if (dataDetail[j].promo[0] === undefined) {
+                        result.table += `${dataDetail[j].menu[0].name}\tRp.${dataDetail[j].menu[0].price}\t${dataDetail[j].quantity}\n`;
+                    } else {
+                        result.table += `${dataDetail[j].menu[0].name}\tRp.${dataDetail[j].menu[0].price}\t${dataDetail[j].quantity}\t${dataDetail[j].promo[0].discount}%\n`;
+                    }
+                }
+            }
+            
+            result.table += "---------------------------------------------------------\n";
+            result.table += dataOrder.length -1  === i? `TOTAL : Rp.${total}` : `TOTAL : Rp.${total}\n\n\n`
+        }
+
+        result.table += `\n\nUntuk Melakukan Tracking Pesanan\n`;
+        result.table += `tracking/{nomor resi}\n\n`;
+        result.table += `Contoh Penggunaan: \n`
+        result.table += `tracking/12388499392`;
+
+        return result.table;
+    }).catch((error) => {
+        console.log(error.response.data)
+        // console.log(error.response.data.meta.message);
     })
 }
 
@@ -478,5 +611,6 @@ module.exports = {
     checkPaymentHandler,
     paymentCheckoutHandler,
     checkOrderStatusHandler,
-    trackingOrderHandler
+    trackingOrderHandler,
+    checkOrderStatusPerDateHandler
 }

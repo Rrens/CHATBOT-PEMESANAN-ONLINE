@@ -45,6 +45,13 @@ const listPromoRequest = async () => {
                     let dataPriceAfterDiscount = dataPriceProduct * dataDiscount/100;
                     resultCombined += `Promo ${dataPromo} Beli ${dataProduct} harga Rp.${dataPriceProduct} Diskon ${dataDiscount}% Jadi Rp.${dataPriceAfterDiscount}`
                     // console.log(dataPriceProduct, dataDiscount, dataPriceAfterDiscount)
+                }else{
+                    dataPromo = response.data.data[i]['name'];
+                    dataProduct = response.data.data[i].menu[0]['name'];
+                    dataPriceProduct = response.data.data[i].menu[0]['price'];
+                    dataDiscount = response.data.data[i]['discount'];
+                    let dataPriceAfterDiscount = dataPriceProduct * dataDiscount/100;
+                    resultCombined += `Promo ${dataPromo} Beli ${dataProduct} harga Rp.${dataPriceProduct} Diskon ${dataDiscount}% Jadi Rp.${dataPriceAfterDiscount}\n\n`
                 }
             }
             result.message = 'SUCCESS'

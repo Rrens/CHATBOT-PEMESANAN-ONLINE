@@ -15,7 +15,8 @@ const {
     checkPaymentHandler,
     paymentCheckoutHandler,
     checkOrderStatusHandler,
-    trackingOrderHandler
+    trackingOrderHandler,
+    checkOrderStatusPerDateHandler
 } = require('./features/pesanan');
 
 const client = new Client({
@@ -62,29 +63,8 @@ client.on('message', async msg => {
         await gambarBagus(text, msg)
     }
 
-     const salamArray = ['hallo', 'halo', 'p', 'hai', 'hi', 'selamat', 'pagi', 'sore', 'malam', 'hay', 'hello', 'greetings'];
+    const salamArray = ['hallo', 'halo', 'p', 'hai', 'hi', 'selamat', 'pagi', 'sore', 'malam', 'hay', 'hello', 'greetings']
 
-    // let isSalam = false;
-
-    // for(let salam of salamArray){
-    //     if(text === salam) {
-    //         isSalam = true;
-    //         break;
-    //     }
-    // }
-
-    // if(isSalam){
-    //     msg.reply(`Terima kasih telah menggunakan Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
-    // - faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
-    // - promo (untuk melihat promo yang sedang berjalan) 
-    // - menu (untuk melihat daftar menu) 
-    // - pilih/{nama barang}/{banyak barang} (untuk menambahkan barang ke keranjang) 
-    // - status user (untuk melihat status pengguna saat ini) 
-
-    // Contoh penggunaan:
-    // - pilih/sambal ijo/10`);
-    // }
-``
     if (salamArray.some(salam => text === salam)) {
         msg.reply(`Terima kasih telah menggunakan Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
 - faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
@@ -92,9 +72,13 @@ client.on('message', async msg => {
 - menu (untuk melihat daftar menu) 
 - pilih/{nama barang}/{banyak barang} (untuk menambahkan barang ke keranjang) 
 - status user (untuk melihat status pengguna saat ini) 
+- pesanan (untuk melihat keranjang)
+- riwayat (melihat semua riwayat pesanan)
+- riwayat/tanggal (melihat riwayat pesanan sesuai tanggal)
 
 Contoh penggunaan:
-- pilih/sambal ijo/10`);
+- pilih/sambal ijo/10
+- menu`);
     }
 
     if(text === 'faq'){
@@ -113,8 +97,12 @@ Contoh penggunaan:
         await listOrder(text, msg)
     }
 
-    if(text == 'cek pesanan'){
+    if(text == 'riwayat'){
         await checkOrderStatusHandler(text, msg)
+    }
+
+    if(text.includes('riwayat/')) {
+        await checkOrderStatusPerDateHandler(text, msg);
     }
 
     const regexOrder = /^pilih\/(\w+\s\w+)\/(\d+)$/;

@@ -37,7 +37,19 @@ class CustomerSeeder extends Seeder
                 'is_block' => 1,
                 'is_distributor' => 0,
                 'request_distributor' => 1,
-            ]
+            ],
+            [
+                'whatsapp' => '6281216913886',
+                'is_block' => 0,
+                'is_distributor' => 1,
+                'request_distributor' => 0,
+            ],
+            [
+                'whatsapp' => '628977548890',
+                'is_block' => 0,
+                'is_distributor' => 0,
+                'request_distributor' => 0,
+            ],
         ]);
     }
 }

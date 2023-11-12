@@ -7,7 +7,7 @@ use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', 'faq');
+Route::redirect('/', 'user');
 // Route::redirect('/', 'faq');
 
 Route::group([

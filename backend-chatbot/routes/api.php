@@ -5,6 +5,7 @@ use App\Http\Controllers\API\MenuController;
 use App\Http\Controllers\API\MidtransController;
 use App\Http\Controllers\API\OrderController as APIORDERContoller;
 use App\Http\Controllers\API\PromoController;
+use App\Http\Controllers\API\RecomendationController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,7 @@ Route::group([
         'prefix' => 'order'
     ], function () {
         Route::post('list-order', [APIORDERContoller::class, 'index']);
+        Route::post('list-order-per-date', [APIORDERContoller::class, 'list_order_per_date']);
         Route::post('store-order', [APIORDERContoller::class, 'store']);
         Route::post('update-order', [APIORDERContoller::class, 'update']);
         Route::post('delete', [APIORDERContoller::class, 'delete']);
@@ -53,5 +55,10 @@ Route::group([
         Route::post('tracking-order', [APIORDERContoller::class, 'tracking_order']);
     });
 });
+
+Route::get('sales-data', [RecomendationController::class, 'index']);
+Route::get('get-data-recomendation', [RecomendationController::class, 'get_data']);
+
+Route::get('sales', [RecomendationController::class, 'index2']);
 
 Route::post('midtrans/callback', [MidtransController::class, 'callback']);
