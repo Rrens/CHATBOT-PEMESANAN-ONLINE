@@ -2,8 +2,7 @@ import requests
 from collections import defaultdict
 from flask import Flask, jsonify, request
 
-app = Flask(__name__)
-@app.route('/api/sales-data', methods=['GET'])
+
 # Fungsi untuk mendapatkan data dari API
 def get_api_data():
     url = 'http://127.0.0.1:8000/api/sales-data'
@@ -32,7 +31,8 @@ def content_based_filtering(api_data):
 
     return recommend_products
 
-
+app = Flask(__name__)
+@app.route('/api/sales-data', methods=['GET'])
 
 def get_sales_data():
     api_data = get_api_data()

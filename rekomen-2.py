@@ -4,6 +4,7 @@ from collections import Counter
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+
 def get_api_data():
     # url = 'http://127.0.0.1:8000/api/sales-data'
     url = 'http://127.0.0.1:8000/api/sales'
@@ -14,12 +15,7 @@ def get_api_data():
     else:
         return None
 
-
-# Data dummy merepresentasikan pembelian produk oleh 16 customer
-
-
-# Data untuk customer baru
-@app.route('/', methods=['GET'])
+@app.route('/api/sales', methods=['GET'])
 
 def get_data():
     # order_data = {
@@ -95,6 +91,7 @@ def get_data():
 
     # Mengumpulkan produk dari customer dengan similarity tertinggi
     similar_products = set(order_data[f'Customer_{most_similar_customer_index + 1}'])
+    # similar_products = set(order_data[most_similar_customer_index + 1])
 
     # Menghitung rekomendasi produk (3 produk)
     recommended_products = similar_products

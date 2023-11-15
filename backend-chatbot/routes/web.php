@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\RecomendationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MenuController;
@@ -52,3 +53,5 @@ Route::group([
     Route::post('resi-order', [OrderController::class, 'resi_order'])->name('order.resi');
     Route::get('tracking/{id}', [OrderController::class, 'tracking'])->name('order.tracking');
 });
+
+Route::get('get-data-recomendation', [RecomendationController::class, 'get_data']);
