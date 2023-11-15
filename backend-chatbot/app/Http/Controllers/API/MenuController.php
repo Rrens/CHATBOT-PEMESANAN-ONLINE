@@ -22,6 +22,16 @@ class MenuController extends Controller
         })
             ->latest()
             ->first();
+        if (!empty($recomendation)) {
+
+            $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
+        } else {
+            $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
+            })
+                ->latest()
+                ->first();
+        }
+
         $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
         $array_recomendation_menu = array();
 

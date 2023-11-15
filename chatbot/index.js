@@ -74,10 +74,11 @@ client.on('message', async msg => {
 - status user (untuk melihat status pengguna saat ini) 
 - pesanan (untuk melihat keranjang)
 - riwayat (melihat semua riwayat pesanan)
-- riwayat/tanggal (melihat riwayat pesanan sesuai tanggal)
+- riwayat/{tanggal-bulan-tahun} (melihat riwayat pesanan sesuai tanggal)
 
 Contoh penggunaan:
 - pilih/sambal ijo/10
+- riwayat/12-04-2023
 - menu`);
     }
 

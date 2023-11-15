@@ -52,16 +52,19 @@ const listOrderRequest = async (msg, phoneNumber) => {
             }
             result.table += "---------------------------------------------------------\n";
             result.table += `TOTAL : Rp.${total}\n\n`
-            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `Untuk Menambah Pemesanan\n`;
             result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Merubah Pesanan\n`;
             result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Menghapus Pesanan\n`;
             result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Untuk Melakukan Pembayaran\n`;
+            result.table += `bayar/{alamat}/{kode pos}\n\n`;
             result.table += `Contoh Penggunaan: \n`
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
-            result.table += `hapus/sambal ijo`;
+            result.table += `hapus/sambal ijo\n`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
             
             return result.table;
         }
@@ -133,16 +136,20 @@ const orderRequest = async (msg, phoneNumber) => {
             }
             result.table += "---------------------------------------------------------\n";
             result.table += `TOTAL : Rp.${total}\n\n`
-            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `Untuk Menambah Pemesanan\n`;
             result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Merubah Pesanan\n`;
             result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Menghapus Pesanan\n`;
             result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Untuk Melakukan Pembayaran\n`;
+            result.table += `bayar/{alamat}/{kode pos}\n\n`;
             result.table += `Contoh Penggunaan: \n`
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
-            result.table += `hapus/sambal ijo`;
+            result.table += `hapus/sambal ijo\n`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
+            
             
             return result.table;
         }
@@ -215,16 +222,18 @@ const updateOrderRequest = async (msg, phoneNumber) => {
             }
             result.table += "---------------------------------------------------------\n";
             result.table += `TOTAL : Rp.${total}\n\n`
-            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += `Untuk Menambah Pemesanan\n`;
             result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Merubah Pesanan\n`;
             result.table += `rubah/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Untuk Menghapus Pesanan\n`;
-            result.table += `hapus/{Nama Produk}\n\n`;
+            result.table += `Untuk Melakukan Pembayaran\n`;
+            result.table += `bayar/{alamat}/{kode pos}\n\n`;
             result.table += `Contoh Penggunaan: \n`
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
-            result.table += `hapus/sambal ijo`;
+            result.table += `hapus/sambal ijo\n`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
             
             return result.table;
         }
@@ -371,9 +380,18 @@ const paymentCheckoutRequest = async (msg, phoneNumber) => {
         
         let data = response.data.data;
         console.log(data);
+        let table = `Silahkan Melakukan Pembayaran Melalui link dibawah ini\n${data.link}\n\n`
+        table += `untuk melihat pesanan yang berhasil dibayar:\n`
+        table += `riwayat\n\n`
+        table += `untuk melihat pesanan yang berhasil dibayar sesuai tanggal:\n`
+        table += `riwayat/{tanggal}\n\n`
+        table += `contoh penggunaan:\n`
+        table += `riwayat\nriwayat/12-05-2023`
         return `Silahkan Melakukan Pembayaran Melalui link dibawah ini\n${data.link}`
     }).catch((error) => {
         console.log(error.response)
+        let tabel = 'anda belum melakukan pemesanan, untuk melakukan pemesanan:\npilih/{nama barang}/{jumlah barang}\n\ncontoh penggunaan:\npilih/sambal ijo/10';
+        return tabel;
     })
 }
 

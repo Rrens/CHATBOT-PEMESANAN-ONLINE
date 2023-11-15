@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function index()
     {
         $active = 'order';
-        $data = Orders::with('customer')->orderBy('status', 'desc')->get();
+        $data = Orders::with('customer')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get();
         $data_detail = OrderDetail::with('menu', 'promo')->get();
 
         $_URL = env('API_URL_CEK_RESI') . 'list_courier?api_key=' . env('API_KEY');

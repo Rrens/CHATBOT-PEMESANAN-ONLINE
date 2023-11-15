@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         $active = 'user';
-        $data = Customers::all();
+        $data = Customers::orderBy('created_at', 'desc')->get();
         return view('admin.page.user', compact('active', 'data'));
     }
 

@@ -38,7 +38,9 @@ const statusUserRequest = async (phoneNumber) => {
         const checkDistributor = response.data.data.is_distributor;
         result.success = true
         if(checkDistributor == 0){
-            result.data = "Anda Bukan Distributor"
+            result.data = "Anda Bukan Distributor\n\n"
+            result.data += "bila ingin menjadi distributor:\n"
+            result.data += "rubah status user"
         }else{
             result.data = "Anda Distributor"
         }
