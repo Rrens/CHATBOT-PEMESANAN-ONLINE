@@ -76,8 +76,12 @@ class MenuController extends Controller
         // ];
         // return response()->json($order_data);
 
+
+        // IKI KRISSS
+        $id_customer = 6;
+
         $orderDetails = OrderDetail::with('menu', 'order')
-            ->whereHas('order', function ($query) {
+            ->whereHas('order', function ($query) use ($id_customer) {
                 $query->where('status', 1);
             })
             ->get();
@@ -99,7 +103,7 @@ class MenuController extends Controller
             $customer = $item->order[0]->id_customer;
             $product = $item->menu[0]->id;
 
-            if ($item->order[0]->id_customer == 5) {
+            if ($item->order[0]->id_customer == $id_customer) {
                 array_push($customerProducts, $item->id_menu);
             }
 
@@ -119,8 +123,12 @@ class MenuController extends Controller
 
         return response()->json([
             // 'id_customer' => 'Customer_' . 1,
-            'id' => 1,
+            'id' => $id_customer,
             'customer_product' => $customerProducts,
+            // 'customer_product' => [
+            //     1,
+            //     2
+            // ],
             'other_customer' => $data
         ]);
     }
