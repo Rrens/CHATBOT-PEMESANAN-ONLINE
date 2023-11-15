@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 def get_api_data():
     # url = 'http://127.0.0.1:8000/api/sales-data'
-    url = 'http://127.0.0.1:8000/api/sales'
+    url = 'http://127.0.0.1:8000/api/v1/sales'
     response = requests.get(url)
     
     if response.status_code == 200:
@@ -103,6 +103,8 @@ def get_data():
                 "message": "Data Successfully Processed"
             },
             "data": {
+                # "id_customer": order_data_api['id_customer'],
+                "id_customer": 1,
                 "recommended_products": recommended_products,
             }
         }

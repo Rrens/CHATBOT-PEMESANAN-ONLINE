@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\FAQController;
-use App\Http\Controllers\API\MenuController;
+use App\Http\Controllers\API\MenuController as APIMenu;
 use App\Http\Controllers\API\MidtransController;
 use App\Http\Controllers\API\OrderController as APIORDERContoller;
 use App\Http\Controllers\API\PromoController;
@@ -30,7 +30,10 @@ Route::group([
 ], function () {
     Route::get('faq', [FAQController::class, 'index']);
     Route::get('promo', [PromoController::class, 'index']);
-    Route::get('menu', [MenuController::class, 'index']);
+
+    Route::get('sales', [APIMenu::class, 'sales']);
+    Route::get('menu/{phone_number}', [APIMenu::class, 'index']);
+
 
     Route::group([
         'prefix' => 'user',
@@ -59,6 +62,8 @@ Route::group([
 Route::get('sales-data', [RecomendationController::class, 'index']);
 Route::get('get-data-recomendation', [RecomendationController::class, 'get_data']);
 
-Route::get('sales', [RecomendationController::class, 'index2']);
+// CONTOH
+// Route::get('sales', [RecomendationController::class, 'index2']);
+
 
 Route::post('midtrans/callback', [MidtransController::class, 'callback']);

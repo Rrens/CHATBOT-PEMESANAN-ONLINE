@@ -10,15 +10,14 @@ const ListMenuHandler = async (text, msg) => {
     
     if(checkNumber.body != 'Customer Is Blocked'){
         try {
-            return chat.sendMessage(await ListMenu());
+            return chat.sendMessage(await ListMenu(checkNumber));
         } catch (error) {
             console.log(error);
         }
     }
-
 }
 
-const ListMenu = async () => {
+const ListMenu = async (phoneNumber) => {
     const result = {
         success: false,
         dataName: null,
@@ -32,10 +31,12 @@ const ListMenu = async () => {
 
     return await axios({
         method: 'GET',
-        url: `${process.env.BE_HOST}menu`
+        url: `${process.env.BE_HOST}menu/${phoneNumber}`
     }).then((response) => {
         if(response.status == 200){
+            // console.log(response.data)
             let arrayData = response.data.data;
+            let arrayRecomendation = response.data.recomendation;
             result.success = true;
             result.table = "Nama Barang\tHarga\t\tStok\n";
             result.table += "---------------------------------------------\n";
@@ -43,7 +44,11 @@ const ListMenu = async () => {
                 result.table += `${arrayData[i].name}\tRp.${arrayData[i].price}\t${arrayData[i].stock}\n`;
             }
             result.table += `---------------------------------------------\n\n`;
-            result.table += `Untuk Melakukan Pemesanan\n`;
+            result.table += 'Rekomendasi Menu:\n';
+            for (let i = 0; i < arrayRecomendation.length; i++) {
+                result.table += `- ${arrayRecomendation[i]}\n`;
+            }
+            result.table += `\nUntuk Melakukan Pemesanan\n`;
             result.table += `pilih/{Nama Produk}/{jumlah Barang}\n\n`;
             result.table += `Contoh Penggunaan: \n`
             result.table += `pilih/sambal ijo/10`;

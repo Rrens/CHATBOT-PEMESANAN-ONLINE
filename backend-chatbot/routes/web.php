@@ -6,6 +6,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'user');
@@ -55,3 +56,13 @@ Route::group([
 });
 
 Route::get('get-data-recomendation', [RecomendationController::class, 'get_data']);
+
+
+// Route::get('cek', function () {
+//     // $_URL = 'http://127.0.0.1:5100/api/sales';
+//     $_URL = 'http://127.0.0.1:9393/cek';
+
+//     $data = collect(Http::get($_URL)->json());
+//     // dd($data);
+//     return response()->json($data);
+// });

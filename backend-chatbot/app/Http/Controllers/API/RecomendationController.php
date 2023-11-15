@@ -12,70 +12,70 @@ use Illuminate\Support\Facades\Http;
 
 class RecomendationController extends Controller
 {
-    public function index()
-    {
-        // $sales =
-        [
-            'customer_id' => 10,
-            'sales' => [
-                [
-                    "Customer_id" => 6,
-                    "Promo" => "Promo_1",
-                    "Product" => "Product_A"
-                ],
-                [
-                    "Customer_id" => 6,
-                    "Promo" => "Promo_1",
-                    "Product" => "Product_A"
-                ],
-                [
-                    "Customer_id" => 6,
-                    "Promo" => "Promo_1",
-                    "Product" => "Product_B"
-                ],
-                [
-                    "Customer_id" => 6,
-                    "Promo" => "Promo_2",
-                    "Product" => "Product_C"
-                ],
-                [
-                    "Customer_id" => 6,
-                    "Promo" => "Promo_3",
-                    "Product" => "Product_A"
-                ],
-                [
-                    "Customer_id" => 7,
-                    "Promo" => "Promo_1",
-                    "Product" => "Product_B"
-                ],
-                [
-                    "Customer_id" => 7,
-                    "Promo" => "Promo_2",
-                    "Product" => "Product_C"
-                ],
-                [
-                    "Customer_id" => 8,
-                    "Promo" => "Promo_1",
-                    "Product" => "Product_A"
-                ],
-                [
-                    "Customer_id" => 8,
-                    "Promo" => "Promo_2",
-                    "Product" => "Product_B"
-                ]
-            ]
-        ];
+    // public function index()
+    // {
+    //     // $sales =
+    //     [
+    //         'customer_id' => 10,
+    //         'sales' => [
+    //             [
+    //                 "Customer_id" => 6,
+    //                 "Promo" => "Promo_1",
+    //                 "Product" => "Product_A"
+    //             ],
+    //             [
+    //                 "Customer_id" => 6,
+    //                 "Promo" => "Promo_1",
+    //                 "Product" => "Product_A"
+    //             ],
+    //             [
+    //                 "Customer_id" => 6,
+    //                 "Promo" => "Promo_1",
+    //                 "Product" => "Product_B"
+    //             ],
+    //             [
+    //                 "Customer_id" => 6,
+    //                 "Promo" => "Promo_2",
+    //                 "Product" => "Product_C"
+    //             ],
+    //             [
+    //                 "Customer_id" => 6,
+    //                 "Promo" => "Promo_3",
+    //                 "Product" => "Product_A"
+    //             ],
+    //             [
+    //                 "Customer_id" => 7,
+    //                 "Promo" => "Promo_1",
+    //                 "Product" => "Product_B"
+    //             ],
+    //             [
+    //                 "Customer_id" => 7,
+    //                 "Promo" => "Promo_2",
+    //                 "Product" => "Product_C"
+    //             ],
+    //             [
+    //                 "Customer_id" => 8,
+    //                 "Promo" => "Promo_1",
+    //                 "Product" => "Product_A"
+    //             ],
+    //             [
+    //                 "Customer_id" => 8,
+    //                 "Promo" => "Promo_2",
+    //                 "Product" => "Product_B"
+    //             ]
+    //         ]
+    //     ];
 
-        $data = DB::table('order_detail as od')
-            ->join('orders as o', 'o.id', '=', 'od.id_order')
-            ->select('o.id_customer as Customer_id', 'od.id_promo as Promo', 'od.id_menu as Product')
-            ->get();
-        // return response()->json($sales);
-        return response()->json([
-            "customer_id" => 2,
-            'sales' => $data
-        ]);
-    }
+    //     $data = DB::table('order_detail as od')
+    //         ->join('orders as o', 'o.id', '=', 'od.id_order')
+    //         ->select('o.id_customer as Customer_id', 'od.id_promo as Promo', 'od.id_menu as Product')
+    //         ->get();
+    //     // return response()->json($sales);
+    //     return response()->json([
+    //         "customer_id" => 2,
+    //         'sales' => $data
+    //     ]);
+    // }
 
 
 
@@ -172,7 +172,7 @@ class RecomendationController extends Controller
 
 
         return response()->json([
-            'id_customer' => 'Customer_' . 5,
+            'id_customer' => 'Customer_' . 1,
             // 'customer_product' => $customerProducts,
             'customer_product' => [
                 1,
@@ -191,16 +191,16 @@ class RecomendationController extends Controller
         ]);
     }
 
-    public function get_data()
-    {
-        try {
-            //code...
-            $_URL = 'http://127.0.0.1:5100/api/sales';
-            $data = collect(Http::get($_URL)->json());
-            return response()->json($data);
-        } catch (Exception $error) {
-            //throw $th;
-            dd($error);
-        }
-    }
+    // public function get_data()
+    // {
+    //     try {
+    //         //code...
+    //         $_URL = 'http://127.0.0.1:5100/api/sales';
+    //         $data = collect(Http::get($_URL)->json());
+    //         return response()->json($data);
+    //     } catch (Exception $error) {
+    //         //throw $th;
+    //         dd($error);
+    //     }
+    // }
 }

@@ -6,29 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Customers extends Model
+class Recomendation_detail extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'customers';
+    protected $table = 'recomendation_detail';
     protected $primaryKey = 'id';
     protected $guarded = [];
 
     protected $fillable = [
-        'whatsapp',
-        'is_blokir',
-        'is_distributor',
-        'request_distributor',
+        'id_recomendation',
+        'id_menu',
         'created_at',
         'updated_at',
     ];
 
-    public function order()
+    public function menu()
     {
-        return $this->belongsTo(Ordersrders::class);
+        return $this->hasMany(Menus::class, 'id', 'id_menu');
     }
 
     public function recomendation()
     {
-        return $this->belongsTo(Recomendations::class);
+        return $this->hasMany(Recomendations::class, 'id', 'id_recomendation');
     }
 }
