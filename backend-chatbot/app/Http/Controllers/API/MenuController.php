@@ -9,58 +9,15 @@ use App\Models\OrderDetail;
 use App\Models\Orders;
 use App\Models\Recomendation_detail;
 use App\Models\Recomendations;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class MenuController extends Controller
 {
-    public function index($phone_number)
-    {
 
-        $data = Menus::all();
-        $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
-            $query->where('whatsapp', $phone_number);
-        })
-            ->latest()
-            ->first();
-        if (!empty($recomendation)) {
-
-            $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
-        } else {
-            $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
-            })
-                ->latest()
-                ->first();
-        }
-
-        $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
-        $array_recomendation_menu = array();
-
-        foreach ($recomendation_detail as $item) {
-            // dd($item);
-            // dd(Menus::where('id', $item['id_menu'])->first()['name']);
-            array_push($array_recomendation_menu, Menus::where('id', $item['id_menu'])->first()['name']);
-        }
-        // dd($array_recomendation_menu);
-        if (!empty($data[0])) {
-            return response()->json([
-                'meta' => [
-                    'status' => 'success',
-                    'message' => 'Successfully fetch data'
-                ],
-                'data' => $data,
-                'recomendation' => $array_recomendation_menu
-            ], 200);
-        }
-
-        return response()->json([
-            'meta' => [
-                'status' => 'failed',
-                'message' => 'Data not found'
-            ]
-        ], 404);
-    }
-
-    public function sales()
+    public function sales($phone_number)
     {
         // $order_data = [
         //     'customer_product' => ['Product_1', 'Product_3', 'Product_5'],
@@ -86,9 +43,18 @@ class MenuController extends Controller
         // ];
         // return response()->json($order_data);
 
+        // if (session()->has('phone_number')) {
+        //     $phoneNumber = session('phone_number');
+        // } else {
+        //     return response()->json('gaada');
+        // }
+        // $phone_number = session('phone_number');
+        // Log::info('Phone number from session MENU: ' . $phone_number);
+        // return $phone_number;
 
+        // dd($phone_number);
+        $id_customer = Customers::where('whatsapp', $phone_number)->first()['id'];
         // IKI KRISSS
-        $id_customer = 6;
 
         $orderDetails = OrderDetail::with('menu', 'order')
             ->whereHas('order', function ($query) use ($id_customer) {
@@ -131,7 +97,7 @@ class MenuController extends Controller
         }
         ksort($data);
 
-        return response()->json([
+        $data_for_post = [
             // 'id_customer' => 'Customer_' . 1,
             'id' => $id_customer,
             'customer_product' => $customerProducts,
@@ -140,6 +106,76 @@ class MenuController extends Controller
             //     2
             // ],
             'other_customer' => $data
-        ]);
+        ];
+
+        try {
+            $response = Http::post(env('API_RECOMENDATION'), [
+                $data_for_post
+            ]);
+
+            return response()->json($response->json());
+        } catch (Exception $error) {
+            //     dd($error->getMessage());
+            return response()->json($error);
+        }
+
+        // return response()->json([
+        //     // 'id_customer' => 'Customer_' . 1,
+        //     'id' => $id_customer,
+        //     'customer_product' => $customerProducts,
+        //     // 'customer_product' => [
+        //     //     1,
+        //     //     2
+        //     // ],
+        //     'other_customer' => $data
+        // ]);
+    }
+
+    public function index($phone_number)
+    {
+        $this->sales($phone_number);
+        // return response()->json($this->sales($phone_number));
+        $data = Menus::all();
+        $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
+            $query->where('whatsapp', $phone_number);
+        })
+            ->latest()
+            ->first();
+        if (!empty($recomendation)) {
+
+            $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
+        } else {
+            $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
+            })
+                ->latest()
+                ->first();
+        }
+
+        $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
+        $array_recomendation_menu = array();
+
+        foreach ($recomendation_detail as $item) {
+            // dd($item);
+            // dd(Menus::where('id', $item['id_menu'])->first()['name']);
+            array_push($array_recomendation_menu, Menus::where('id', $item['id_menu'])->first()['name']);
+        }
+        // dd($array_recomendation_menu);
+        if (!empty($data[0])) {
+            return response()->json([
+                'meta' => [
+                    'status' => 'success',
+                    'message' => 'Successfully fetch data'
+                ],
+                'data' => $data,
+                'recomendation' => $array_recomendation_menu
+            ], 200);
+        }
+
+        return response()->json([
+            'meta' => [
+                'status' => 'failed',
+                'message' => 'Data not found'
+            ]
+        ], 404);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customers;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -15,6 +16,14 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'phoneNumber' => 'required',
         ]);
+
+        // $request->session()->put('phone_number', $request['phoneNumber']);
+        // $request->session()->get('phone_number');
+        // $request->session()->put('user.teams', 'developers');
+        // session_start();
+        session(['phone_number' => $request['phoneNumber']]);
+        // session()->save();
+        // Log::info('Phone number stored in session USER: ' . session(['phone_number' => $request['phoneNumber']]));
 
         if ($validator->fails()) {
             return response()->json([
@@ -44,14 +53,20 @@ class UserController extends Controller
             ], 200);
         }
 
-
         return response()->json([
             'meta' => [
                 'status' => 'success',
                 'message' => 'Phone Number Founded'
             ],
-            'data' => $check_phone_number
+            'data' => $check_phone_number,
+            'session' => session()->get('phone_number')
         ], 200);
+    }
+
+    public function coba()
+    {
+        $data = session()->all();
+        return response()->json($data);
     }
 
     public function store(Request $request)

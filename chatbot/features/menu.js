@@ -31,8 +31,13 @@ const ListMenu = async (phoneNumber) => {
 
     return await axios({
         method: 'GET',
-        url: `${process.env.BE_HOST}menu/${phoneNumber}`
+        url: `${process.env.BE_HOST}menu/${phoneNumber}`,
+        Headers: {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+        }
     }).then((response) => {
+        console.log(response.data)
         if(response.status == 200){
             // console.log(response.data)
             let arrayData = response.data.data;
@@ -56,7 +61,8 @@ const ListMenu = async (phoneNumber) => {
         // console.log(result.table)
         return result.table
     }).catch((error) => {
-        console.log(error.response.data)
+        // console.log(error.response.data)
+        console.log(error)
     })
 }
 

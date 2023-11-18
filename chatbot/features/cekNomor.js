@@ -38,7 +38,7 @@ const checkNumberRequest = async (phoneNumber) => {
             "Content-Type": "application/json",
         }
     }).then(async (response) => {
-        
+        console.log(response.data)
         if(response.data.meta.message === 'Customer Is Blocked'){
             result.success = false;
             result.message = response.data.meta.message;

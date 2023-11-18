@@ -2,49 +2,44 @@ import requests
 from scipy.spatial.distance import cosine
 from collections import Counter
 from flask import Flask, jsonify, request
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
-def get_api_data():
-    # url = 'http://127.0.0.1:8000/api/sales-data'
-    url = 'http://127.0.0.1:8000/api/v1/sales'
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return None
+def get_data_request():
+    if request.method == 'POST':
+        data_json = request.json
+        try:
+            return data_json
+        except KeyError as e:
+        # Tangkap kesalahan jika kunci tidak ada dalam data
+            return {"error": f"KeyError: {str(e)}"}, 400
 
-@app.route('/api/sales', methods=['GET'])
+        except ZeroDivisionError:
+            # Tangkap kesalahan jika terjadi pembagian dengan nol
+            return {"error": "Cannot divide by zero"}, 400
 
-def get_data():
-    # order_data = {
-    #     'Customer_1': ['Product_1', 'Product_3', 'Product_5'],
-    #     'Customer_2': ['Product_1', 'Product_2', 'Product_4', 'Product_6'],
-    #     'Customer_3': ['Product_2', 'Product_3', 'Product_4'],
-    #     'Customer_4': ['Product_5', 'Product_6', 'Product_7'],
-    #     'Customer_5': ['Product_3', 'Product_6', 'Product_8'],
-    #     'Customer_6': ['Product_2', 'Product_7', 'Product_9'],
-    #     'Customer_7': ['Product_1', 'Product_4', 'Product_8'],
-    #     'Customer_8': ['Product_3', 'Product_5'],
-    #     'Customer_9': ['Product_1', 'Product_2', 'Product_9'],
-    #     'Customer_10': ['Product_4', 'Product_7', 'Product_8'],
-    #     'Customer_11': ['Product_1', 'Product_2', 'Product_4', 'Product_5'],
-    #     'Customer_12': ['Product_3', 'Product_6', 'Product_7'],
-    #     'Customer_13': ['Product_2', 'Product_4', 'Product_5', 'Product_8'],
-    #     'Customer_14': ['Product_1', 'Product_3', 'Product_6', 'Product_9'],
-    #     'Customer_15': ['Product_1', 'Product_5', 'Product_7'],
-    #     'Customer_16': ['Product_2', 'Product_4', 'Product_8']
-    # }
-    order_data_api = get_api_data()
-    order_data = order_data_api['other_customer']
+        except Exception as e:
+            # Tangkap kesalahan umum
+            return {"error": f"An error occurred: {str(e)}"}, 500
+        
+
+@app.route('/cek', methods = ['POST'])
+
+def process_recomendation():
+    order_data_api = get_data_request()
+    order_data = order_data_api[0]['other_customer']
+    # return jsonify(order_data_api)
     status = True
     
-    if order_data_api['customer_product'] == None:
+    if order_data_api[0]['customer_product'] == None:
         status = False
         
     if status:
-        new_customer = order_data_api['customer_product']
+        new_customer = order_data_api[0]['customer_product']
     else:
         all_products = [product for products in order_data.values() for product in products]
 
@@ -103,12 +98,16 @@ def get_data():
                 "message": "Data Successfully Processed"
             },
             "data": {
-                # "id_customer": order_data_api['id_customer'],
-                "id_customer": 1,
+                "id_customer": order_data_api[0]['id'],
+                # "id_customer": 1,
                 "recommended_products": recommended_products,
             }
         }
-    return jsonify(response), 200
-
+    
+    url = os.getenv("URL_API_POST")
+    response_post = requests.post(url, json=response)
+    response_post_data = response_post.json()
+    return jsonify(response_post_data)
+    
 if __name__ == '__main__':
-    app.run(debug=True, port=5100)
+    app.run(debug=True, port=5200)

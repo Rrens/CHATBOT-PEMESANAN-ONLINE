@@ -24,21 +24,21 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
+Route::get('coba', [UserController::class, 'coba']);
 Route::group([
     'prefix' => 'v1'
 ], function () {
     Route::get('faq', [FAQController::class, 'index']);
     Route::get('promo', [PromoController::class, 'index']);
 
-    Route::get('sales', [APIMenu::class, 'sales']);
-    Route::get('menu/{phone_number}', [APIMenu::class, 'index']);
+    Route::get('sales/{phone_number}', [APIMenu::class, 'sales'])->middleware('api-session');
+    Route::get('menu/{phone_number}', [APIMenu::class, 'index'])->middleware('api-session');
 
 
     Route::group([
         'prefix' => 'user',
     ], function () {
-        Route::post('check-phone-number', [UserController::class, 'index']);
+        Route::post('check-phone-number', [UserController::class, 'index'])->middleware('api-session');
         Route::post('add-phone-number', [UserController::class, 'store']);
         Route::post('status-user', [UserController::class, 'check_status']);
         Route::post('change-status-user', [UserController::class, 'change_status']);
