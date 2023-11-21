@@ -82,6 +82,37 @@ Contoh penggunaan:
 - menu`);
     }
 
+    const helpArray = ['help', 'tolong']
+    if (helpArray.some(salam => text === salam)) {
+        msg.reply(`Berikut adalah semua list perintah yang dapat dilakukan di Chatbot DEDE SATOE. Silakan pilih kebutuhan Anda:
+- faq (untuk melihat pertanyaan dan jawaban yang sering ditanyakan) 
+- promo (untuk melihat promo yang sedang berjalan) 
+- menu (untuk melihat daftar menu) 
+- pilih/{nama barang}/{jumlah barang} (untuk menambahkan barang ke keranjang) 
+- rubah/{nama barang}/{jumlah barang} (untuk merubah barang di keranjang) 
+- hapus/{nama barang} (untuk menghapus barang di keranjang) 
+- status user (untuk melihat status pengguna saat ini) 
+- rubah status user (untuk request menjadi distributor) 
+- pesanan (untuk melihat keranjang)
+- bayar/{alamat lengkap}/{kode pos} (untuk melakukan pembayaran)
+- riwayat (melihat semua riwayat pesanan)
+- riwayat/{tanggal-bulan-tahun} (melihat riwayat pesanan sesuai tanggal)
+
+Contoh penggunaan:
+- faq
+- promo
+- menu
+- pilih/sambal ijo/20
+- rubah/sambal ijo/30
+- hapus/sambal ijo
+- status user
+- rubah status user
+- pesanan
+- bayar/jalan soekarno hatta no 18 surabaya/601939
+- riwayat
+- riwayat/12-04-2023`);
+    }
+
     if(text === 'faq'){
         await ListFaqHandler(text, msg)
     }

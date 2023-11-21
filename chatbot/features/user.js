@@ -40,7 +40,8 @@ const statusUserRequest = async (phoneNumber) => {
         if(checkDistributor == 0){
             result.data = "Anda Bukan Distributor\n\n"
             result.data += "bila ingin menjadi distributor:\n"
-            result.data += "rubah status user"
+            result.data += "rubah status user\n\n";
+            result.data += 'untuk melihat semua list perintah:\n help';
         }else{
             result.data = "Anda Distributor"
         }

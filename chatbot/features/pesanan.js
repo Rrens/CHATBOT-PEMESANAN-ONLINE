@@ -64,7 +64,8 @@ const listOrderRequest = async (msg, phoneNumber) => {
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
             result.table += `hapus/sambal ijo\n`;
-            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203\n\n`;
+            result.table += 'untuk melihat semua list perintah:\n help';
             
             return result.table;
         }
@@ -148,7 +149,8 @@ const orderRequest = async (msg, phoneNumber) => {
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
             result.table += `hapus/sambal ijo\n`;
-            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203\n\n`;
+            result.table += 'untuk melihat semua list perintah:\n help';
             
             
             return result.table;
@@ -233,7 +235,8 @@ const updateOrderRequest = async (msg, phoneNumber) => {
             result.table += `pilih/sambal ijo/10\n`;
             result.table += `rubah/sambal ijo/10\n`;
             result.table += `hapus/sambal ijo\n`;
-            result.table += `bayar/dharmahusada indah 18 surabaya/649203`;
+            result.table += `bayar/dharmahusada indah 18 surabaya/649203\n\n`;
+            result.table += 'untuk melihat semua list perintah:\n help';
             
             return result.table;
         }
@@ -387,10 +390,10 @@ const paymentCheckoutRequest = async (msg, phoneNumber) => {
         table += `riwayat/{tanggal}\n\n`
         table += `contoh penggunaan:\n`
         table += `riwayat\nriwayat/12-05-2023`
-        return `Silahkan Melakukan Pembayaran Melalui link dibawah ini\n${data.link}`
+        return `Silahkan Melakukan Pembayaran Melalui link dibawah ini\n${data.link}\n\nuntuk melihat semua list perintah:\n help`;
     }).catch((error) => {
         console.log(error.response)
-        let tabel = 'anda belum melakukan pemesanan, untuk melakukan pemesanan:\npilih/{nama barang}/{jumlah barang}\n\ncontoh penggunaan:\npilih/sambal ijo/10';
+        let tabel = 'anda belum melakukan pemesanan, untuk melakukan pemesanan:\npilih/{nama barang}/{jumlah barang}\n\ncontoh penggunaan:\npilih/sambal ijo/10\n\nuntuk melihat semua list perintah:\n help';
         return tabel;
     })
 }
@@ -476,7 +479,8 @@ const checkOrderStatusRequest = async (msg, phoneNumber) => {
         result.table += `\n\nUntuk Melakukan Tracking Pesanan\n`;
         result.table += `tracking/{nomor resi}\n\n`;
         result.table += `Contoh Penggunaan: \n`
-        result.table += `tracking/12388499392`;
+        result.table += `tracking/12388499392\n\n`;
+        result.table += 'untuk melihat semua list perintah:\n help';
         return result.table;
     }).catch((error) => {
         console.log(error.response);
@@ -560,7 +564,8 @@ const checkOrderStatusPerDateRequest = async (msg, phoneNumber) => {
         result.table += `\n\nUntuk Melakukan Tracking Pesanan\n`;
         result.table += `tracking/{nomor resi}\n\n`;
         result.table += `Contoh Penggunaan: \n`
-        result.table += `tracking/12388499392`;
+        result.table += `tracking/12388499392\n\n`;
+        result.table += 'untuk melihat semua list perintah:\n help';
 
         return result.table;
     }).catch((error) => {
@@ -613,7 +618,8 @@ const trackingOrderRequest = async (msg, phoneNumber) => {
         result.table = `NAMA EKSPEDISI: ${data_api.summary.courier}\n`
         result.table += `NOMOR RESI: ${data_api.summary.awb}\n`
         result.table += `${data_api.detail.shipper} \n${data_api.detail.receiver}`
-        result.table += `\n\n Status Pengiriman: \n LOKASI: ${data_api.history[data_length - 1].date}\n KETERANGAN: ${data_api.history[data_length - 1].desc}`
+        result.table += `\n\n Status Pengiriman: \n LOKASI: ${data_api.history[data_length - 1].date}\n KETERANGAN: ${data_api.history[data_length - 1].desc}\n\n`;
+        result.table += 'untuk melihat semua list perintah:\n help';
         return result.table;
     }).catch((error) => {
         // console.log(error.response.data.meta.message);
