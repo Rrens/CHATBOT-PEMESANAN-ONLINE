@@ -16,52 +16,52 @@ class PromoSeeder extends Seeder
         DB::table('promos')->insert([
             [
                 'id_menu' => 1,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 20
             ],
             [
                 'id_menu' => 2,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 3,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 4,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 5,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 6,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 7,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 8,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 9,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
             [
                 'id_menu' => 10,
-                'name' => 'PALESTINE WILL BE FREE',
+                'name' => 'Hari Raya',
                 'discount' => 30
             ],
         ]);

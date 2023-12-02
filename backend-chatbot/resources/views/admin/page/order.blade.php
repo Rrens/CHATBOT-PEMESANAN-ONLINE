@@ -22,13 +22,16 @@
 @section('container')
     <div class="page-heading d-flex justify-content-between">
         <div class="flex-start">
-            <h3>Pesanan</h3>
+            {{-- <h3>{{ ($status == 'paid' ? 'Pesanan Terbayar' : $status == 'not yet paid') ? 'Pesanan Belum Dibayar' : 'Pesanan dalam keranjang' }}
+            </h3> --}}
+            @if ($status == 'paid')
+                <h3>Pesanan Terbayar</h3>
+            @elseif ($status == 'not yet paid')
+                <h3>Pesanan Belum Dibayar</h3>
+            @else
+                <h3>Pesanan dalam keranjang</h3>
+            @endif
         </div>
-        {{-- <div class="flex-end">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Add_modal"><i
-                    class="bi bi-plus-circle"></i>&nbsp Tambah
-                Pesanan</button>
-        </div> --}}
     </div>
     <div class="page-content">
         <section class="row">
@@ -46,7 +49,9 @@
                                             <th>No Resi</th>
                                             <th>Alamat</th>
                                             <th>Detail</th>
-                                            <th>Aksi</th>
+                                            @if ($status != 'cart')
+                                                <th>Aksi</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,23 +78,31 @@
                                                             class="bi bi-info-circle-fill"></i>
                                                     </button>
                                                 </td>
-                                                @if ($item->status == 1)
-                                                    <td>
-                                                        <button class="btn btn-light-warning btn-sm" data-bs-toggle="modal"
-                                                            data-bs-target="#modalResi{{ $item->id }}">Beri resi
-                                                        </button>
-                                                        <button class="btn btn-light-danger btn-sm" data-bs-toggle="modal"
-                                                            data-bs-target="#modalTracking"
-                                                            onclick="approve({{ $item->id }})">Tracking
-                                                            Pesanan
-                                                        </button>
-                                                    </td>
-                                                @else
-                                                    <td>
-                                                        <p>-</p>
-                                                    </td>
+                                                @if ($status != 'cart')
+                                                    @if ($item->status == 1)
+                                                        <td>
+                                                            <button class="btn btn-light-warning btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modalResi{{ $item->id }}">Beri resi
+                                                            </button>
+                                                            <button class="btn btn-light-danger btn-sm"
+                                                                data-bs-toggle="modal" data-bs-target="#modalTracking"
+                                                                onclick="approve({{ $item->id }})">Tracking
+                                                                Pesanan
+                                                            </button>
+                                                            @if (!empty($item->resi_number))
+                                                                <a href="https://api.whatsapp.com/send/?phone={{ $item->customer[0]->whatsapp }}&text=pesanan%20anda%20sukses%20terbayar%2C%20untuk%20cek%20resi%20dapat%20dengan%20perintah%3A%0Atracking%2F{{ $item->resi_number }}"
+                                                                    target="_blank" class="btn btn-light-success btn-sm"><i
+                                                                        class="bi bi-whatsapp"></i>&nbspKirim
+                                                                    Pesan</a>
+                                                            @endif
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <p>-</p>
+                                                        </td>
+                                                    @endif
                                                 @endif
-
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -101,9 +101,8 @@
                             </button>
                             <input type="number" value="{{ $item->whatsapp }}" name="whatsapp" hidden>
                             <input type="number" value="{{ $item->is_block }}" name="is_block" hidden>
-                            <button type="submit" class="btn btn-danger ml-1" data-bs-dismiss="modal">
-                                <i class="bx bx-check d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Delete</span>
+                            <button type="submit" class="btn btn-danger ml-1">
+                                Block
                             </button>
                         </div>
                     </form>
@@ -131,9 +130,8 @@
                             <input type="number" value="{{ $item->whatsapp }}" name="whatsapp" hidden>
                             <input type="number" value="{{ $item->is_distributor }}" name="is_distributor" hidden>
 
-                            <button type="submit" class="btn btn-success ml-1" data-bs-dismiss="modal">
-                                <i class="bx bx-check d-block d-sm-none"></i>
-                                <span class="d-none d-sm-block">Update</span>
+                            <button type="submit" class="btn btn-success ml-1">
+                                Update
                             </button>
                         </div>
                     </form>

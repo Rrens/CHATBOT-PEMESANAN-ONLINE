@@ -3,8 +3,8 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href=""><img src="{{ asset('assets/img/icon/Logo-BJA.png') }}" alt="Logo"
-                            style="height: 60px !important; width: 60px" srcset="" /></a>
+                    <a href=""><img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
+                            style="height: 60px !important; width: 100p%" srcset="" /></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2 align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -66,14 +66,31 @@
                         <span>Promo</span>
                     </a>
                 </li>
-                <li class="sidebar-item  {{ $active == 'order' ? 'active' : '' }}">
-                    <a href="{{ route('order.index') }}" class="sidebar-link">
+                <li class="sidebar-item has-sub {{ $active == 'order' ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-cart-fill"></i>
                         <span>Pesanan</span>
                     </a>
+                    <ul class="submenu">
+                        <li class="submenu-item">
+                            <a href="{{ route('order.paid') }}" class="sidebar-link">
+                                Sudah Bayar
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('order.not-paid') }}" class="sidebar-link">
+                                Belum Bayar
+                            </a>
+                        </li>
+                        <li class="submenu-item">
+                            <a href="{{ route('order.cart') }}" class="sidebar-link">
+                                Belum Checkout
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ route('logout') }}" class="sidebar-link">
                         <i class="bi bi-door-open-fill"></i>
                         <span>Logout</span>
                     </a>

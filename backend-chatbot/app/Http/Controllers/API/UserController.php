@@ -21,7 +21,6 @@ class UserController extends Controller
         // $request->session()->get('phone_number');
         // $request->session()->put('user.teams', 'developers');
         // session_start();
-        session(['phone_number' => $request['phoneNumber']]);
         // session()->save();
         // Log::info('Phone number stored in session USER: ' . session(['phone_number' => $request['phoneNumber']]));
 
@@ -59,15 +58,9 @@ class UserController extends Controller
                 'message' => 'Phone Number Founded'
             ],
             'data' => $check_phone_number,
-            'session' => session()->get('phone_number')
         ], 200);
     }
 
-    public function coba()
-    {
-        $data = session()->all();
-        return response()->json($data);
-    }
 
     public function store(Request $request)
     {

@@ -16,8 +16,7 @@
 
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="{{ route('login') }}"><img src="{{ asset('assets/img/icon/Logo-BJA.png') }}"
-                        alt="Logo"></a>
+                <a href="{{ route('login') }}"><img src="{{ asset('assets/img/logo.png') }}" alt="Logo"></a>
             </div>
 
             @yield('container')

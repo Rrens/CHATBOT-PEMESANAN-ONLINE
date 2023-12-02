@@ -130,7 +130,7 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah FAQ</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Menu</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('menu.update') }}" method="post">
@@ -143,7 +143,7 @@
                                     name="name"value="{{ $item->name }}" required>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="price">Harga`</label>
+                                <label for="price">Harga</label>
                                 <input type="number" class="form-control mt-3" id="price" name="price"
                                     value="{{ $item->price }}" required>
                             </div>

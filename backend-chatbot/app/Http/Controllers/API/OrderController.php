@@ -8,6 +8,7 @@ use App\Models\Menus;
 use App\Models\OrderDetail;
 use App\Models\Orders;
 use App\Models\Promos;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -114,8 +115,6 @@ class OrderController extends Controller
 
         $data = Orders::where('id_customer', $customer_id)->where('status', 0)->first();
 
-
-
         if (empty($checkAvailableProductOnOrder)) {
 
             if (empty($data)) {
@@ -141,7 +140,7 @@ class OrderController extends Controller
             }
             $data_detail->save();
         } else {
-
+            $promo = Promos::where('id_menu', $menu->id)->first();
             $checkQuantity = OrderDetail::where('id_menu', $menu->id)->where('id_order', $data->id)->first()['quantity']
                 +
                 $request['quantity'];
@@ -163,6 +162,7 @@ class OrderController extends Controller
                 $data_detail->promo_amount = (int) $menu->price * ($promo->discount / 100);
                 $data_detail->price = (int) $data_detail->promo_amount * $data_detail->quantity;
             } else {
+                // dd($promo);
                 $data_detail->price = (int) $menu->price * $data_detail->quantity;
             }
 
@@ -180,6 +180,7 @@ class OrderController extends Controller
             ],
             'data' => [
                 'order' => $data_chatbot,
+                'date_order' => Carbon::now()
             ]
         ], 200);
     }
@@ -406,7 +407,7 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'customer' => 'required',
             'address' => 'required|regex:([\d\sa-zA-Z,.]+)',
-            'zip_code' => 'required|regex:(\d+)'
+            'zip_code' => 'required|numeric|digits:5',
         ]);
 
         if ($validator->fails()) {

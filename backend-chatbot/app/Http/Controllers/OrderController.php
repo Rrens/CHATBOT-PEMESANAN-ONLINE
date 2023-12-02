@@ -14,13 +14,55 @@ class OrderController extends Controller
     public function index()
     {
         $active = 'order';
-        $data = Orders::with('customer')->orderBy('status', 'desc')->orderBy('created_at', 'desc')->get();
+        $status = 'not yet paid';
+        $data = Orders::with('customer')
+            ->where('status', 1)
+            ->where('payment_status',  null)
+            ->orderBy('status', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
         $data_detail = OrderDetail::with('menu', 'promo')->get();
 
         $_URL = env('API_URL_CEK_RESI') . 'list_courier?api_key=' . env('API_KEY');
         $data_list_courier = collect(Http::get($_URL)->json());
 
-        return view('admin.page.order', compact('active', 'data', 'data_detail', 'data_list_courier'));
+        return view('admin.page.order', compact('active', 'data', 'data_detail', 'data_list_courier', 'status'));
+    }
+
+    public function order_paid()
+    {
+        $active = 'order';
+        $status = 'paid';
+        $data = Orders::with('customer')
+            ->where('status', 1)
+            ->where('payment_status', '!=', null)
+            // ->where('link', '!=', null)
+            ->orderBy('status', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $data_detail = OrderDetail::with('menu', 'promo')->get();
+
+        $_URL = env('API_URL_CEK_RESI') . 'list_courier?api_key=' . env('API_KEY');
+        $data_list_courier = collect(Http::get($_URL)->json());
+
+        return view('admin.page.order', compact('active', 'data', 'data_detail', 'data_list_courier', 'status'));
+    }
+
+    public function order_in_cart()
+    {
+        $active = 'order';
+        $status = 'cart';
+        $data = Orders::with('customer')
+            ->where('status', 0)
+            ->orderBy('status', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $data_detail = OrderDetail::with('menu', 'promo')->get();
+
+        $_URL = env('API_URL_CEK_RESI') . 'list_courier?api_key=' . env('API_KEY');
+        $data_list_courier = collect(Http::get($_URL)->json());
+
+        return view('admin.page.order', compact('active', 'data', 'data_detail', 'data_list_courier', 'status'));
     }
 
     public function resi_order(Request $request)
