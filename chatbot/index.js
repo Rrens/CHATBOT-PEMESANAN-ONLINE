@@ -18,6 +18,7 @@ const {
     trackingOrderHandler,
     checkOrderStatusPerDateHandler
 } = require('./features/pesanan');
+const { botHandler } = require('./features/Bot');
 
 const client = new Client({
     authStrategy: new LocalAuth()
@@ -35,21 +36,85 @@ client.on('ready', async msg => {
   // Number where you want to send the message.
     // const number = "+6281216913886";
 
-    // // Your message.
+    // // // Your message.
     // const text = "Hey john";
 
     // // Getting chatId from the number.
     // // we have to delete "+" from the beginning and add "@c.us" at the end of the number.
     // const chatId = number.substring(1) + "@c.us";
 
-    // Sending message.
+    // // Sending message.
     // client.sendMessage(chatId, text);
+    // const number = "+6281216913886";
+
+    // // // Your message.
+    // // Your message.
+    // const messageText = "Oii";
+
+    // // Getting chatId from the number.
+    // // we have to delete "+" from the beginning and add "@c.us" at the end of the number.
+    // const chatId = number.substring(1) + "@c.us";
+
+    // // Function to send a message
+    // const sendMessage = () => {
+    //     client.sendMessage(chatId, messageText);
+    // };
+
+    // // Set an interval to send the message every 5 seconds (5000 milliseconds)
+    // const intervalId = setInterval(sendMessage, 1000);
+
+    // // Stop the interval after a certain number of iterations (e.g., 20 times)
+    // // This prevents the loop from running indefinitely
+    // let iterations = 0;
+    // const maxIterations = 10;
+
+    // const stopInterval = () => {
+    //     clearInterval(intervalId);
+    // };
+
+    // // Set a timeout to stop the interval after a certain number of iterations
+    // setTimeout(stopInterval, maxIterations * 1000);
 });
 
 client.on('message', async msg => {
 
     const text = msg.body.toLowerCase() || '';
 
+    //  bot/{desimal}/{angka 1-10000}/{angka 1-10}
+    const regexBot = /^bot\/\d+\/\d+\/\d+(\/.*)?$/;
+
+    if(regexBot.test(text)){
+        const body = msg._data.body;
+        const cmd = body.split("/");
+
+        const data = {
+            nomor: cmd[1],
+            banyak: cmd[2],
+            lama: cmd[3],
+            pesan: cmd[4],
+        }
+        console.log(data)
+
+        const number = `+62${data.nomor}`;
+        const messageText = `${data.pesan}`;
+        const chatId = number.substring(1) + "@c.us";
+
+        let iterations = 0;
+        const maxIterations = data.banyak;
+
+        const sendMessage = () => {
+            client.sendMessage(chatId, messageText);
+            iterations++;
+
+            // Stop the interval after reaching the desired number of iterations
+            if (iterations >= maxIterations) {
+                clearInterval(intervalId);
+            }
+        };
+        let interval = `${data.lama}000`
+        // Set an interval to send the message every 5 seconds (5000 milliseconds)
+        const intervalId = setInterval(sendMessage, interval);
+    }
     //check status
     if(text === 'cek'){
         await checkNumberHandler(msg)
@@ -75,6 +140,7 @@ client.on('message', async msg => {
 - pesanan (untuk melihat keranjang)
 - riwayat (melihat semua riwayat pesanan)
 - riwayat/{tanggal-bulan-tahun} (melihat riwayat pesanan sesuai tanggal)
+- tolong (untuk melihat semua perintah di chatbot)
 
 Contoh penggunaan:
 - pilih/sambal ijo/10
@@ -165,7 +231,7 @@ Contoh penggunaan:
         await trackingOrderHandler(text, msg)
     }
 
-    const regexCheckout = /^bayar\/([\d\sa-zA-Z,.]+)\/(\d{6})$/;
+    const regexCheckout = /^bayar\/([\d\sa-zA-Z,.]+)\/(\d{5})$/;
     if(regexCheckout.test(text)){
         await paymentCheckoutHandler(text, msg)
     }

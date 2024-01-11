@@ -17,7 +17,7 @@ Route::group([
 ], function () {
     Route::get('login', [AuthController::class, 'login'])->name('login');
     Route::post('post-login', [AuthController::class, 'post_login'])->name('post_login');
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
 // Route::redirect('/', 'faq');
 

@@ -99,7 +99,7 @@
                                 name="name"value="{{ old('name') }}" required>
                         </div>
                         <div class="form-group mb-3">
-                            <label for="price">Harga`</label>
+                            <label for="price">Harga</label>
                             <input type="number" class="form-control mt-3" id="price" name="price"
                                 value="{{ old('price') }}" required>
                         </div>

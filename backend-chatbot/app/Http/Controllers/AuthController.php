@@ -21,7 +21,7 @@ class AuthController extends Controller
     public function post_login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
@@ -31,12 +31,12 @@ class AuthController extends Controller
         }
 
         $data = [
-            'username' => $request->username,
+            'email' => $request->email,
             'password' => $request->password,
         ];
 
         if (!Auth::attempt($data)) {
-            Alert::toast('Username atau Password Salah', 'error');
+            Alert::toast('Email atau Password Salah', 'error');
             return redirect()->route('login')->withInput();
         }
 

@@ -44,7 +44,7 @@ def process_recomendation():
         all_products = [product for products in order_data.values() for product in products]
 
         # Menghitung produk yang paling sering dibeli
-        most_common_products = Counter(all_products).most_common(3)
+        most_common_products = Counter(all_products).most_common(3) # DIGOLEK i
         # print("Produk yang paling banyak dibeli:")
         array_product = []
         for product, count in most_common_products:
@@ -52,7 +52,6 @@ def process_recomendation():
             array_product.append(product)
         new_customer = array_product
     # Mengumpulkan semua produk yang dibeli oleh semua customer
-
     # Mencari seluruh produk yang ada
     all_products = set()
     for products in order_data.values():
