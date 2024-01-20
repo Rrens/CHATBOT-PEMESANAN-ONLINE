@@ -1,2 +1,3 @@
-chatbot/.wwebjs_auth
-chatbot/.wwebjs_cache
+node_modules
+.wwebjs_auth
+.wwebjs_cache

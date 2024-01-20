@@ -1,0 +1,6 @@
+2024/01/11-15:10:33.763 5874 Reusing MANIFEST D:\MATERI-KULIAH\TUGAS-AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2024/01/11-15:10:33.763 5874 Recovering log #38
+2024/01/11-15:10:33.764 5874 Reusing old log D:\MATERI-KULIAH\TUGAS-AKHIR\APLIKASI\chatbot\.wwebjs_auth\session\Default\Local Storage\leveldb/000038.log 
+2024/01/11-15:12:34.747 5930 Level-0 table #43: started
+2024/01/11-15:12:34.826 5930 Level-0 table #43: 15562 bytes OK
+2024/01/11-15:12:34.873 5930 Delete type=0 #38
