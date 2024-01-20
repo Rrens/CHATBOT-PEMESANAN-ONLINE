@@ -1,0 +1,33 @@
+on:
+  push:
+    branches: [ recomendation ]
+name: 🚀 Deploy website Dispora on push
+jobs:
+  web-deploy:
+    name: 🎉 Auto Deploy Production
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2.3.2
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER_RECOMENDATION }}
+        username: ${{ secrets.FTP_USER_RECOMENDATION }}
+        password: ${{ secrets.FTP_PASS_RECOMENDATION }}
+        port: ${{ secrets.FTP_PORT_RECOMENDATION }}
+        server-dir: ./
+        log-level: standard
+        protocol: ftps
+        dry-run: false
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/github*
+          **/github*/**
+
+    - name: Install dependencies
+      run: |
+        composer install
+        php artisan optimize:clear
