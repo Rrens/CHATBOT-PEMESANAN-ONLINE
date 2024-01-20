@@ -1,7 +1,7 @@
 on:
   push:
     branches: [ chatbot ]
-name: 🚀 Deploy website Dispora on push
+name: 🚀 Deploy Chatbot Dispora on push
 jobs:
   web-deploy:
     name: 🎉 Auto Deploy Production
