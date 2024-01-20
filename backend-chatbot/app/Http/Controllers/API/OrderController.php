@@ -39,11 +39,25 @@ class OrderController extends Controller
             ->where('status', 0)
             ->first();
 
+
         if (!empty($order)) {
             $data = OrderDetail::with('menu', 'promo')
                 ->where('id_order', $order->id)
                 ->get();
 
+            // return response()->json([
+            //     'cek' => !empty($data),
+            //     'data' => $data
+            // ]);
+
+            if (empty($data[0])) {
+                return response()->json([
+                    'meta' => [
+                        'status' => 'Success',
+                        'message' => 'Order Not Found'
+                    ],
+                ], 404);
+            }
             return response()->json([
                 'meta' => [
                     'status' => 'Success',
