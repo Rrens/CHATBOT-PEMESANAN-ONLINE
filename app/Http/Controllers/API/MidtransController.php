@@ -40,6 +40,7 @@ class MidtransController extends Controller
             }
         } else if ($status == 'settlement') {
             $transaction->payment_status = 'SUCCESS';
+            $transaction->save();
             $order_detail = OrderDetail::where('id_order', $order_id)->get();
             foreach ($order_detail as $item) {
                 $menu = Menus::findOrFail($item->id_menu);
