@@ -17,7 +17,7 @@ class OrderController extends Controller
         $status = 'not yet paid';
         $data = Orders::with('customer')
             ->where('status', 1)
-            ->where('payment_status',  null)
+            ->where('payment_status',  'PENDING')
             ->orderBy('status', 'desc')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -35,7 +35,7 @@ class OrderController extends Controller
         $status = 'paid';
         $data = Orders::with('customer')
             ->where('status', 1)
-            ->where('payment_status', '!=', null)
+            ->where('payment_status', 'SUCCESS')
             // ->where('link', '!=', null)
             ->orderBy('status', 'desc')
             ->orderBy('created_at', 'desc')
