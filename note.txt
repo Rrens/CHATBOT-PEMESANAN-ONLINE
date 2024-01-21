@@ -3,4 +3,4 @@ I found in the official github the fix the issue, the solution is here: in summa
 
 change the line 175 replace this:
 
- const INTRO_IMG_SELECTOR = 'div[role=\'textbox\']'; //'[data-icon=\'chat\']';
+const INTRO_IMG_SELECTOR = 'div[role=\'textbox\']'; //'[data-icon=\'chat\']';
