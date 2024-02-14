@@ -66,6 +66,12 @@
                         <span>Promo</span>
                     </a>
                 </li>
+                <li class="sidebar-item  {{ $active == 'omzet' ? 'active' : '' }}">
+                    <a href="{{ route('omzet.index') }}" class="sidebar-link">
+                        <i class="bi bi-cash-stack"></i>
+                        <span>Omzet</span>
+                    </a>
+                </li>
                 <li class="sidebar-item has-sub {{ $active == 'order' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-cart-fill"></i>

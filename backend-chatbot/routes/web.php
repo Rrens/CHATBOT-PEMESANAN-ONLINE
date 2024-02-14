@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OmzetController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Http;
@@ -67,6 +68,11 @@ Route::group([
         Route::get('cart', [OrderController::class, 'order_in_cart'])->name('order.cart');
         Route::post('resi-order', [OrderController::class, 'resi_order'])->name('order.resi');
         Route::get('tracking/{id}', [OrderController::class, 'tracking'])->name('order.tracking');
+    });
+
+    Route::group([], function () {
+        Route::get('omzet', [OmzetController::class, 'index'])->name('omzet.index');
+        Route::get('omzet/{year}', [OmzetController::class, 'filter'])->name('omzet.filter');
     });
 });
 
