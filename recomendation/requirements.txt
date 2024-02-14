@@ -1,9 +1,9 @@
 flask
 python-dotenv
 psycopg2-binary
-mysql-connector-python
-MySQL
-pymysql
+# mysql-connector-python
+# MySQL
+# pymysql
 pandas
 requests
 scikit-learn
