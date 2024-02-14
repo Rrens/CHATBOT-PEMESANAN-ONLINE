@@ -19,28 +19,28 @@ class MenuController extends Controller
 
     public function sales($phone_number)
     {
-        // $order_data = [
-        //     'customer_product' => ['Product_1', 'Product_3', 'Product_5'],
-        //     // 'customer_product' => null,
-        //     'other_customer' => [
-        //         'Customer_1' => ['Product_1', 'Product_3', 'Product_5'],
-        //         'Customer_2' => ['Product_1', 'Product_2', 'Product_4', 'Product_6'],
-        //         'Customer_3' => ['Product_2', 'Product_3', 'Product_4'],
-        //         'Customer_4' => ['Product_5', 'Product_6', 'Product_7'],
-        //         'Customer_5' => ['Product_3', 'Product_6', 'Product_8'],
-        //         'Customer_6' => ['Product_2', 'Product_7', 'Product_9'],
-        //         'Customer_7' => ['Product_1', 'Product_4', 'Product_8'],
-        //         'Customer_8' => ['Product_3', 'Product_5'],
-        //         'Customer_9' => ['Product_1', 'Product_2', 'Product_9'],
-        //         'Customer_10' => ['Product_4', 'Product_7', 'Product_8'],
-        //         'Customer_11' => ['Product_1', 'Product_2', 'Product_4', 'Product_5'],
-        //         'Customer_12' => ['Product_3', 'Product_6', 'Product_7'],
-        //         'Customer_13' => ['Product_2', 'Product_4', 'Product_5', 'Product_8'],
-        //         'Customer_14' => ['Product_1', 'Product_3', 'Product_6', 'Product_9'],
-        //         'Customer_15' => ['Product_1', 'Product_5', 'Product_7'],
-        //         'Customer_16' => ['Product_2', 'Product_4', 'Product_8']
-        //     ]
-        // ];
+        $order_data = [
+            'customer_product' => ['Product_1', 'Product_3', 'Product_5'],
+            // 'customer_product' => null,
+            'other_customer' => [
+                'Customer_1' => ['Product_1', 'Product_3', 'Product_5'],
+                'Customer_2' => ['Product_1', 'Product_2', 'Product_4', 'Product_6'],
+                'Customer_3' => ['Product_2', 'Product_3', 'Product_4'],
+                'Customer_4' => ['Product_5', 'Product_6', 'Product_7'],
+                'Customer_5' => ['Product_3', 'Product_6', 'Product_8'],
+                'Customer_6' => ['Product_2', 'Product_7', 'Product_9'],
+                'Customer_7' => ['Product_1', 'Product_4', 'Product_8'],
+                'Customer_8' => ['Product_3', 'Product_5'],
+                'Customer_9' => ['Product_1', 'Product_2', 'Product_9'],
+                'Customer_10' => ['Product_4', 'Product_7', 'Product_8'],
+                'Customer_11' => ['Product_1', 'Product_2', 'Product_4', 'Product_5'],
+                'Customer_12' => ['Product_3', 'Product_6', 'Product_7'],
+                'Customer_13' => ['Product_2', 'Product_4', 'Product_5', 'Product_8'],
+                'Customer_14' => ['Product_1', 'Product_3', 'Product_6', 'Product_9'],
+                'Customer_15' => ['Product_1', 'Product_5', 'Product_7'],
+                'Customer_16' => ['Product_2', 'Product_4', 'Product_8']
+            ]
+        ];
         // return response()->json($order_data);
 
         // if (session()->has('phone_number')) {
@@ -108,9 +108,12 @@ class MenuController extends Controller
             'other_customer' => $data
         ];
 
+        // return response()->json($order_data);
+
         try {
             $response = Http::post(env('API_RECOMENDATION'), [
                 $data_for_post
+                // $order_data
             ]);
 
             return response()->json($response->json());
@@ -134,8 +137,9 @@ class MenuController extends Controller
     public function index($phone_number)
     {
         $this->sales($phone_number);
-        // return response()->json($this->sales($phone_number));
         $data = Menus::all();
+        return response()->json($this->sales($phone_number));
+        // return response()->json($this->sales($phone_number));
         $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
             $query->where('whatsapp', $phone_number);
         })

@@ -104,6 +104,7 @@ def process_recomendation():
         }
     
     url = os.getenv("URL_API_POST")
+    # return jsonify(url)
     response_post = requests.post(url, json=response)
     response_post_data = response_post.json()
     return jsonify(response_post_data)

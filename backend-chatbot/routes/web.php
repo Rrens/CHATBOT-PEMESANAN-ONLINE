@@ -73,6 +73,7 @@ Route::group([
 Route::get('get-data-recomendation', [RecomendationController::class, 'get_data']);
 
 
+
 // Route::get('cek', function () {
 //     // $_URL = 'http://127.0.0.1:5100/api/sales';
 //     $_URL = 'http://127.0.0.1:9393/cek';

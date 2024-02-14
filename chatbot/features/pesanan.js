@@ -25,6 +25,8 @@ const listOrderRequest = async (msg, phoneNumber) => {
         table: "",
     }
 
+    // console.log('mbuhhhhhhhhhhhhhhhhhhhhhh')
+
     return await axios({
         method: "POST",
         url: `${process.env.BE_HOST}order/list-order`,
@@ -32,9 +34,11 @@ const listOrderRequest = async (msg, phoneNumber) => {
             customer: phoneNumber
         },
     }).then((response) => {
+        // console.log(response.data.data)
+        // console.log(response.data);
         const dataOrder = response.data.data.order;
         // console.log(dataOrder[0] == null);
-        console.log(dataOrder)
+        // console.log(dataOrder)
         let dateOrder = dataOrder[0].created_at
         if(dataOrder[0].updated_at != null){
             dateOrder = dataOrder[0].updated_at
@@ -74,6 +78,7 @@ const listOrderRequest = async (msg, phoneNumber) => {
         
         return result.table;
     }).catch((error) => {
+        console.log(error)
         result.table = `${error.response.data.meta.message}\n\n`
         result.table += `untuk melihat pesanan yang sudah dibayar\nriwayat\n\n`
         result.table += `untuk melihat pesanan yang sudah dibayar sesuai tannggal\nriwayat/{tanggal}-{bulan}-{tahun}\n\n`
