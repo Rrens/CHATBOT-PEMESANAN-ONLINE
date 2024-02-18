@@ -11,6 +11,7 @@ use App\Models\Recomendation_detail;
 use App\Models\Recomendations;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -60,6 +61,7 @@ class MenuController extends Controller
             ->whereHas('order', function ($query) use ($id_customer) {
                 $query->where('status', 1);
             })
+            // ->groupBy('id_menu')
             ->get();
 
         $count_orders = Orders::where('status', 1)
@@ -75,6 +77,7 @@ class MenuController extends Controller
         foreach ($count_orders as $item) {
             array_push($array_order, $loop_order++);
         }
+
         foreach ($orderDetails as $item) {
             $customer = $item->order[0]->id_customer;
             $product = $item->menu[0]->id;
@@ -95,18 +98,21 @@ class MenuController extends Controller
 
             array_push($data[$customer], $product);
         }
+        // return response()->json($customerProducts);
         ksort($data);
 
         $data_for_post = [
             // 'id_customer' => 'Customer_' . 1,
             'id' => $id_customer,
-            'customer_product' => $customerProducts,
+            'customer_product' => array_values(array_unique($customerProducts)),
             // 'customer_product' => [
             //     1,
             //     2
             // ],
             'other_customer' => $data
         ];
+
+        // return response()->json($data_for_post);
 
         try {
             $response = Http::post(env('API_RECOMENDATION'), [
@@ -136,6 +142,16 @@ class MenuController extends Controller
         $this->sales($phone_number);
         // return response()->json($this->sales($phone_number));
         $data = Menus::all();
+        $order_detail = DB::table('order_detail as od')
+            ->join('orders as o', 'o.id', '=', 'od.id_order')
+            ->join('customers as c', 'c.id', '=', 'o.id_customer')
+            ->select('od.id_menu')
+            ->groupBy('od.id_menu')
+            ->where('c.whatsapp', $phone_number)
+            ->get();
+
+        $data_menu_customer = array_column(json_decode($order_detail, true), 'id_menu');
+
         $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
             $query->where('whatsapp', $phone_number);
         })
@@ -143,7 +159,9 @@ class MenuController extends Controller
             ->first();
         if (!empty($recomendation)) {
 
-            $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
+            $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)
+                ->whereNotIn('id_menu', $data_menu_customer)
+                ->get();
         } else {
             $recomendation = Recomendations::whereHas('customer', function ($query) use ($phone_number) {
             })
@@ -151,13 +169,21 @@ class MenuController extends Controller
                 ->first();
         }
 
-        $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)->get();
+        $recomendation_detail = Recomendation_detail::where('id_recomendation', $recomendation->id)
+            ->whereNotIn('id_menu', $data_menu_customer)
+            ->get();
+
         $array_recomendation_menu = array();
 
-        foreach ($recomendation_detail as $item) {
-            // dd($item);
-            // dd(Menus::where('id', $item['id_menu'])->first()['name']);
-            array_push($array_recomendation_menu, Menus::where('id', $item['id_menu'])->first()['name']);
+        if (!empty($recomendation_detail[0])) {
+            foreach ($recomendation_detail as $item) {
+                // dd($item);
+                // dd(Menus::where('id', $item['id_menu'])->first()['name']);
+                array_push($array_recomendation_menu, Menus::where('id', $item['id_menu'])->first()['name']);
+            }
+        } else {
+            // return response()->json($data_menu_customer);
+            array_push($array_recomendation_menu, Menus::whereNotIn('id', $data_menu_customer)->pluck('name'));
         }
         // dd($array_recomendation_menu);
         if (!empty($data[0])) {

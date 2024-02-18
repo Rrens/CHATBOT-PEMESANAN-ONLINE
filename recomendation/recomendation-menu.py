@@ -48,7 +48,7 @@ def process_recomendation():
         # print("Produk yang paling banyak dibeli:")
         array_product = []
         for product, count in most_common_products:
-            # print(f"Produk: {product}, Jumlah Pembelian: {count}")
+            print(f"Produk: {product}, Jumlah Pembelian: {count}")
             array_product.append(product)
         new_customer = array_product
     # Mengumpulkan semua produk yang dibeli oleh semua customer
@@ -89,7 +89,8 @@ def process_recomendation():
 
     # Menghitung rekomendasi produk (3 produk)
     recommended_products = similar_products
-    recommended_products = list(recommended_products)[:3]
+    # recommended_products = list(recommended_products)[:5]
+    recommended_products = list(recommended_products)
     print(f"Rekomendasi 3 produk untuk customer baru: {recommended_products}")
     response = {
             "meta": {
@@ -102,6 +103,7 @@ def process_recomendation():
                 "recommended_products": recommended_products,
             }
         }
+    # return jsonify(response)
     
     url = os.getenv("URL_API_POST")
     response_post = requests.post(url, json=response)
