@@ -22,7 +22,7 @@
 @section('container')
     <div class="page-heading d-flex justify-content-between">
         <div class="flex-start">
-            <h3>USER MANAGEMENT</h3>
+            <h3>User Management</h3>
         </div>
     </div>
     <div class="page-content">

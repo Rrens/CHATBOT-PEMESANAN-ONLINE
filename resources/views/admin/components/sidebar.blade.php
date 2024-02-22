@@ -42,53 +42,71 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Admin</li>
-                <li class="sidebar-item {{ $active == 'user' ? 'active' : '' }}">
-                    <a href="{{ route('user.index') }}" class="sidebar-link">
-                        <i class="bi bi-person-lines-fill"></i>
-                        <span>User Management</span>
-                    </a>
-                </li>
-                <li class="sidebar-item  {{ $active == 'faq' ? 'active' : '' }}">
-                    <a href="{{ route('faq.index') }}" class="sidebar-link">
-                        <i class="bi bi-question-octagon-fill"></i>
-                        <span>FAQ</span>
-                    </a>
-                </li>
-                <li class="sidebar-item  {{ $active == 'menu' ? 'active' : '' }}">
-                    <a href="{{ route('menu.index') }}" class="sidebar-link">
-                        <i class="bi bi-menu-button"></i>
-                        <span>Menu</span>
-                    </a>
-                </li>
-                <li class="sidebar-item  {{ $active == 'promo' ? 'active' : '' }}">
-                    <a href="{{ route('promo.index') }}" class="sidebar-link">
-                        <i class="bi bi-menu-app-fill"></i>
-                        <span>Promo</span>
-                    </a>
-                </li>
-                <li class="sidebar-item has-sub {{ $active == 'order' ? 'active' : '' }}">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-cart-fill"></i>
-                        <span>Pesanan</span>
-                    </a>
-                    <ul class="submenu">
-                        <li class="submenu-item">
-                            <a href="{{ route('order.paid') }}" class="sidebar-link">
-                                Sudah Bayar
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{ route('order.not-paid') }}" class="sidebar-link">
-                                Belum Bayar
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{ route('order.cart') }}" class="sidebar-link">
-                                Belum Checkout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                @if (auth()->user()->role == 'superadmin')
+                    <li class="sidebar-item {{ $active == 'admin' ? 'active' : '' }}">
+                        <a href="{{ route('admin.index') }}" class="sidebar-link">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item {{ $active == 'user' ? 'active' : '' }}">
+                        <a href="{{ route('user.index') }}" class="sidebar-link">
+                            <i class="bi bi-person-lines-fill"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_konten')
+                    <li class="sidebar-item  {{ $active == 'faq' ? 'active' : '' }}">
+                        <a href="{{ route('faq.index') }}" class="sidebar-link">
+                            <i class="bi bi-question-octagon-fill"></i>
+                            <span>FAQ</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item  {{ $active == 'menu' ? 'active' : '' }}">
+                        <a href="{{ route('menu.index') }}" class="sidebar-link">
+                            <i class="bi bi-menu-button"></i>
+                            <span>Menu</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item  {{ $active == 'promo' ? 'active' : '' }}">
+                        <a href="{{ route('promo.index') }}" class="sidebar-link">
+                            <i class="bi bi-menu-app-fill"></i>
+                            <span>Promo</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->role == 'superadmin' || auth()->user()->role == 'admin_order')
+                    <li class="sidebar-item  {{ $active == 'omzet' ? 'active' : '' }}">
+                        <a href="{{ route('omzet.index') }}" class="sidebar-link">
+                            <i class="bi bi-cash-stack"></i>
+                            <span>Omzet</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item has-sub {{ $active == 'order' ? 'active' : '' }}">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-cart-fill"></i>
+                            <span>Pesanan</span>
+                        </a>
+                        <ul class="submenu">
+                            <li class="submenu-item">
+                                <a href="{{ route('order.paid') }}" class="sidebar-link">
+                                    Sudah Bayar
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('order.not-paid') }}" class="sidebar-link">
+                                    Belum Bayar
+                                </a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('order.cart') }}" class="sidebar-link">
+                                    Belum Checkout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="sidebar-item">
                     <a href="{{ route('logout') }}" class="sidebar-link">
                         <i class="bi bi-door-open-fill"></i>

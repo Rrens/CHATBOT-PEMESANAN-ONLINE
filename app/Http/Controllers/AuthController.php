@@ -39,8 +39,17 @@ class AuthController extends Controller
             Alert::toast('Email atau Password Salah', 'error');
             return redirect()->route('login')->withInput();
         }
+        // dd(Auth::user());
 
-        return redirect()->route('user.index');
+        if (Auth::user()->role == 'admin_order') {
+            return redirect()->route('omzet.index');
+        }
+        if (Auth::user()->role == 'admin_konten') {
+            return redirect()->route('faq.index');
+        }
+        if (Auth::user()->role == 'superadmin') {
+            return redirect()->route('user.index');
+        }
     }
 
     public function logout()
