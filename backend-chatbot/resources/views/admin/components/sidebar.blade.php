@@ -43,6 +43,12 @@
             <ul class="menu">
                 <li class="sidebar-title">Admin</li>
                 @if (auth()->user()->role == 'superadmin')
+                    <li class="sidebar-item {{ $active == 'admin' ? 'active' : '' }}">
+                        <a href="{{ route('admin.index') }}" class="sidebar-link">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Admin Management</span>
+                        </a>
+                    </li>
                     <li class="sidebar-item {{ $active == 'user' ? 'active' : '' }}">
                         <a href="{{ route('user.index') }}" class="sidebar-link">
                             <i class="bi bi-person-lines-fill"></i>
