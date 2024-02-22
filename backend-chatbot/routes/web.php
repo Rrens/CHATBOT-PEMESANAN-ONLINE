@@ -22,11 +22,11 @@ Route::group([
 });
 // Route::redirect('/', 'faq');
 
-Route::group([
-    'middleware' => ['auth']
-],  function () {
+Route::group([],  function () {
     Route::group([
         'prefix' => 'user',
+        'middleware' => ['auth', 'role:superadmin']
+
     ],  function () {
         Route::get('', [UserController::class, 'index'])->name('user.index');
         Route::post('change-status-user', [UserController::class, 'change_status_user'])->name('user.change_status_user');
@@ -35,6 +35,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'faq',
+        'middleware' => ['role:superadmin,admin_konten']
     ], function () {
         Route::get('', [FaqController::class, 'index'])->name('faq.index');
         Route::post('', [FaqController::class, 'store'])->name('faq.store');
@@ -44,6 +45,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'menu',
+        'middleware' => ['role:superadmin,admin_konten']
     ], function () {
         Route::get('', [MenuController::class, 'index'])->name('menu.index');
         Route::post('', [MenuController::class, 'store'])->name('menu.store');
@@ -52,7 +54,8 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'promo'
+        'prefix' => 'promo',
+        'middleware' => ['role:superadmin,admin_konten']
     ], function () {
         Route::get('', [PromoController::class, 'index'])->name('promo.index');
         Route::post('', [PromoController::class, 'store'])->name('promo.store');
@@ -62,6 +65,7 @@ Route::group([
 
     Route::group([
         'prefix' => 'order',
+        'middleware' => ['role:superadmin,admin_order']
     ], function () {
         Route::get('not-paid', [OrderController::class, 'index'])->name('order.not-paid');
         Route::get('paid', [OrderController::class, 'order_paid'])->name('order.paid');
@@ -70,7 +74,9 @@ Route::group([
         Route::get('tracking/{id}', [OrderController::class, 'tracking'])->name('order.tracking');
     });
 
-    Route::group([], function () {
+    Route::group([
+        'middleware' => ['role:superadmin,admin_order']
+    ], function () {
         Route::get('omzet', [OmzetController::class, 'index'])->name('omzet.index');
         Route::get('omzet/{year}', [OmzetController::class, 'filter'])->name('omzet.filter');
     });
