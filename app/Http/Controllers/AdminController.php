@@ -26,14 +26,17 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            Alert::error($validator->messages()->all());
+            dd($validator->messages()->all());
+            // Alert::error($validator->messages()->all());
             return back()->withInput();
         }
 
         unset($request['_token']);
         $data = new User();
         $data->fill($request->all());
-        $data->password = Hash::make($request->password);
+        if ($request->has('password')) {
+            $data->password = Hash::make($request->password);
+        }
         $data->save();
 
         Alert::toast('Sukses Menyimpan', 'success');
@@ -44,7 +47,7 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email:rfc,dns|exists:users,email',
-            'password' => 'required|min:6',
+            'password' => 'nullable|min:6',
             'role' => 'required|in:superadmin,admin_order,admin_konten',
         ]);
 

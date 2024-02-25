@@ -101,8 +101,8 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="name">Nama</label>
-                            <input type="text" class="form-control mt-3" id="name"
-                                name="name"value="{{ old('name') }}" required>
+                            <input type="text" class="form-control mt-3" id="name" name="name"
+                                value="{{ old('name') }}" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="email">Email</label>
@@ -117,6 +117,7 @@
                         <div class="form-group mb-3">
                             <label for="stock">Role</label>
                             <select name="role" id="role" class="form-select mt-3">
+                                <option selected hidden>Pilih Role</option>
                                 <option {{ old('role') == 'superadmin' ? 'selected' : '' }} value="superadmin">Superadmin
                                 </option>
                                 <option {{ old('role') == 'admin_order' ? 'selected' : '' }} value="admin_order">Admin
@@ -164,6 +165,11 @@
                                     value="{{ $item->email }}" required readonly>
                             </div>
                             <div class="form-group mb-3">
+                                <label for="email">Password</label>
+                                <input type="text" class="form-control mt-3" id="password" name="password"
+                                    value="{{ old('password') }}">
+                            </div>
+                            <div class="form-group mb-3">
                                 <label for="stock">Role</label>
                                 <select name="role" id="role" class="form-select mt-3">
                                     <option {{ $item->role == 'superadmin' ? 'selected' : '' }} value="superadmin">
@@ -178,11 +184,11 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-light-secondary">
                                 <i class="bx bx-x d-block d-sm-none"></i>
                                 <span class="d-none d-sm-block">Close</span>
                             </button>
-                            <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                            <button type="submit" class="btn btn-primary ml-1">
                                 <i class="bx bx-check d-block d-sm-none"></i>
                                 <span class="d-none d-sm-block">Save</span>
                             </button>
